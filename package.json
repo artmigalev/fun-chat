@@ -4,11 +4,11 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "deploy": "npm run build && gh-pages -d public",
+        "deploy": "npm run build && gh-pages -d dist",
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "check-format": "prettier --list-different --ignore-unknown . && npx prettier --write `src/**/*.scss`",
+        "check-format": "prettier --check .",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write ."
     },
@@ -28,6 +28,8 @@
         "vite-tsconfig-paths": "^5.1.4"
     },
     "dependencies": {
+        "@material/material-color-utilities": "^0.4.0",
+        "@material/web": "^2.4.1",
         "normalize.css": "^8.0.1"
     }
 }
