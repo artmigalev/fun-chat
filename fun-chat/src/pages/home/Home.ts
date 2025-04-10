@@ -1,23 +1,17 @@
 import { Component } from "@/component/component";
-import { IPage } from "@/interface";
+import { INode } from "@/interface";
 
+const homePage: INode = {
+    tag: "div",
+    className: "home",
+};
 
-const homePage: IPage = {
-  tag: 'div',
-  className:'home'
-}
+export default class Home extends Component {
+    view;
+    constructor() {
+        super(homePage);
+        this.view = this.getView();
+    }
 
-
-
-export default class Home extends Component{
-  view;
-  constructor() {
-    super(homePage)
-    this.view = getView()
-  }
-
-
-  getView() {
-    
-  }
+    getView() {}
 }

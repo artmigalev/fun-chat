@@ -1,10 +1,12 @@
-export type Nodes = { tag:string, className:string };
+// export type  = { tag: string; className: string };
+
+import { INode } from "@/interface";
 
 export class Component {
     private node: null | HTMLElement = null;
     private childNodes: Array<Component> = [];
     constructor(
-        { tag = "div", className = "" }: Nodes,
+        { tag = "div", className = "" }: INode,
         ...childNodes: Component[]
     ) {
         const node: HTMLElement = document.createElement(tag);
