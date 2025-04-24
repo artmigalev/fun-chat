@@ -78,7 +78,7 @@ export class Component {
     }
     addListener(
         event: string,
-        listener: (event?: Event) => void,
+        listener: (event: Event) => void,
         options = false,
     ) {
         if (this.node === null) {

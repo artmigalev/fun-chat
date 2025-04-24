@@ -1,0 +1,6 @@
+login: qwerty
+pass: Qwertyqwe
+login: artq
+pass: arTmigalev
+login: tommy
+pass: tommyGtommy

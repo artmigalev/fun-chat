@@ -9,6 +9,7 @@ export default defineConfig({
     server: {
         port: 3000,
         open: true,
+        hmr: true,
     },
     build: {
         outDir: "./public",
@@ -19,6 +20,8 @@ export default defineConfig({
             "@": "/src",
             "@component": "/src/component/component.ts",
             "@assets": "/src/assets",
+            "@utils": "/src/utils",
+            "@home": "/src/pages/home",
         },
     },
     plugins: [
@@ -26,6 +29,12 @@ export default defineConfig({
         eslintPlugin(),
         svgr({
             exportAsDefault: true,
+            svgo: true, // Оптимизация SVG
+            svgoConfig: {
+                plugins: [
+                    { removeViewBox: false }, // Сохраняем viewBox
+                ],
+            },
         }),
     ],
 });

@@ -1,0 +1,14 @@
+.form-input {
+    display: flex;
+    gap: 2em;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    padding: 2rem;
+    border: 1px solid #000;
+}
+.form-input .input-set {
+    width: 100%;
+    height: max-content;
+}

@@ -1,17 +1,41 @@
 import { Component } from "@/component/component";
-import { INode } from "@/interface";
-
+import { INode, IUser } from "@/interface";
+import "./Home.scss";
+import Header from "./header/header";
+import Main from "./main/main";
+import Footer from "./footer/foooter";
+import App from "@/app/app";
+import { connection } from "@/main";
 const homePage: INode = {
     tag: "div",
-    className: "home",
+    className: "home-page",
 };
 
 export default class Home extends Component {
-    view;
-    constructor() {
+    public user: IUser;
+    protected header: Header;
+    protected main: Main;
+    protected parent: App;
+    footer: Footer;
+    constructor( parent: App) {
         super(homePage);
-        this.view = this.getView();
+        this.parent = parent;
+        this.user = this.parent.user;
+        this.header = new Header(this);
+        this.main = new Main(this);
+        this.footer = new Footer();
+        this.getView();
     }
-
-    getView() {}
+    getView() {
+        this.appendChildren([this.header, this.main, this.footer]);
+    }
+    exit(user: IUser) {
+        this.parent.removeChildren();
+        if (connection.OPEN) {
+            connection.userIsLogout(user)?.then((isLogined) => {
+                console.log(isLogined);
+            });
+        }
+        // this.parent.append(new Authorization(this.parent));
+    }
 }

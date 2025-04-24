@@ -1,37 +1,13 @@
-.auth-page{
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .auth-component{
-    padding: 2rem;
-    border: .5rem solid #000;
+@import url("./form/form.scss");
+
+.auth-page {
+    width: 100%;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 2em;
-    .auth-footer{
-      display: flex;
-      justify-content: center;
+    .title {
+        text-align: center;
     }
-    .title{
-      text-align: center;
-    }
-    .auth-main{
-      display: flex;
-      flex-direction: column;
-      gap: 2em;
-      .container{
-        display: flex;
-        flex-direction: column;
-        gap: .2em;
-      }
-    }
-    .auth-footer{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      
-    }
-  }
 }

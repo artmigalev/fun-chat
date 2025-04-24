@@ -1,0 +1,24 @@
+.header-chat {
+    width: 100%;
+    padding: 2rem;
+    border: 0.5rem solid #000;
+    .header-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .user-name {
+            font-size: 2rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .header-title {
+            font-size: 2rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .header-btn {
+            border: none;
+        }
+    }
+}

@@ -1,64 +1,66 @@
 import { Component } from "@/component/component";
-import { INode } from "@/interface";
-import Input from "@/utils/inputs.ts/input";
-import './Authorization.scss'
+import { INode, IUser } from "@/interface";
+import "./Authorization.scss";
+import { connection } from "@/main";
+import App from "@/app/app";
+import FormAuth from "./form/form";
+import Home from "../home/Home";
 const authorization: INode = {
     tag: "div",
     className: "auth-page",
 };
-const authComp: INode = {
-    tag: "form",
-    className: "auth-component",
-};
+
 const title: INode = {
-    tag: 'h2',
-    className:'title'
-}
-const compMain: INode = {
-    tag: 'div',
-    className:'auth-main'
-}
-const compFooter: INode = {
-    tag: 'div',
-    className:'auth-footer'
-}
-const label: INode = {
-  tag: 'label',
-  className:'labe'}
+    tag: "h2",
+    className: "title",
+};
+
 export default class Authorization extends Component {
-    view;
+    view: Component;
+    parent: App;
+    form: FormAuth;
 
-    constructor() {
+    constructor(parent: App) {
         super(authorization);
-      this.view = this.getView();
-      this.append(this.view)
+        this.parent = parent;
+        this.form = new FormAuth(this);
+        this.view = this.getView();
+        this.append(this.view);
     }
-
     getView(): Component {
-        const authComponent = new Component(authComp , ...[new Component(title),new Component(compMain),new Component(compFooter) ]);
+        const wrapper = new Component({ tag: "div", className: "wrapper" });
+        const titleWindow = new Component(title);
+        titleWindow.setText("Authorization");
+        wrapper.appendChildren([titleWindow, this.form]);
 
-        let [titleComponent,main,footer] = [authComponent.getChild()[0],authComponent.getChild()[1],authComponent.getChild()[2]]
-        titleComponent.setText('Login')
-
-        const usernameInput = this.getInputContainer('username')
-        const passwordInput = this.getInputContainer('password')
-
-
-        main.appendChildren([usernameInput, passwordInput])
-        footer.append(new Input('submit'))
-        authComponent.addListener('submit', (e)=> e?.preventDefault())
-
-
-
-        return authComponent;
+        return wrapper;
     }
-    getInputContainer(type:string) {
-        const container = new Component({ tag: 'div', className: 'container' })
-        const labe = new Component(label)
-        const input = new Input(type)
-        labe.setText(`${type.toUpperCase()}:`)
-        labe.setAttributes('for',input.getNode()().id)
-        container.appendChildren([labe, input])
-        return container;
+
+    createdUSer(login: string, password: string) {
+        const user = {
+            id: btoa(login),
+            login: login,
+            password: password,
+            token: btoa(login),
+            isLogined: false,
+        };
+
+        this.saveToken(user);
+        if (connection.OPEN) {
+            connection?.addNewUser(user)?.then((isLogined) => {
+                if (isLogined) {
+                    this.parent.removeChildren();
+                    this.parent.user = user;
+                    this.parent.append(new Home(this.parent));
+                }
+            });
+        }
+    }
+
+    // Метод для сохранения токена
+    saveToken(user: IUser) {
+        const token = btoa(user.login as string);
+        user.token = token;
+        localStorage.setItem("authToken", token);
     }
 }
