@@ -4,15 +4,18 @@ import Authorization from "@/pages/Authorization/Authorization";
 import Home from "@/pages/home/Home";
 import "./app.scss";
 import { connection } from "@/main";
+import WS from "@/ws/ws";
 const app: INode = {
     tag: "div",
     className: "app",
 };
 export default class App extends Component {
     user: IUser;
-    constructor() {
+    connection: WS;
+    constructor(connection: WS) {
         super(app);
         this.user = Object.create({});
+        this.connection = connection;
     }
 
     start() {

@@ -7,27 +7,34 @@ export default class WS extends WebSocket {
     }
     run() {
         this.onopen = () => {
-            const app = new App();
-            app.start();
+            if (this.OPEN) {
+                const app = new App(this);
+                app.start();
 
-            this.addEventListener("message", (e: MessageEvent) => {
-                const serverResponse = JSON.parse(e.data);
-                const { type, payload } = serverResponse;
-                switch (type) {
-                    case "USER_EXTERNAL_LOGIN":
-                        alert("USER_EXTERNAL_LOGIN");
-                        break;
-                    case "USER_EXTERNAL_LOGOUT":
-                        alert("USER_EXTERNAL_LOGOUT");
-                        break;
-                    case "MSG_SEND":
-                        alert("MSG_SEND");
-                        break;
-                    default:
-                        break;
-                }
-            });
+                this.addEventListener("message", (e: MessageEvent) => {
+                    const serverResponse = JSON.parse(e.data);
+                    const { type, payload } = serverResponse;
+                    switch (type) {
+                        case "USER_EXTERNAL_LOGIN":
+                            alert("USER_EXTERNAL_LOGIN");
+                            break;
+                        case "USER_EXTERNAL_LOGOUT":
+                            alert("USER_EXTERNAL_LOGOUT");
+                            break;
+                        case "MSG_SEND":
+                            alert("MSG_SEND");
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            } else {
+                throw new Error("WebSocket is not open");
+            }
         };
+        this.onerror = (error) => {
+            console.log(error);
+        }
     }
     async getUsers(status: string): Promise<[] | IUser[]> {
         if (this.OPEN) {
