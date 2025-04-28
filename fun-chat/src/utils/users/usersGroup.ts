@@ -9,9 +9,8 @@ const list: INode = {
     className: "users-list",
 };
 export default class UsersGroup extends Component {
-
     view: Component;
-    users: IUser[] ;
+    users: IUser[];
     parent: Main;
     constructor(parent: Main) {
         super(list);
@@ -23,18 +22,16 @@ export default class UsersGroup extends Component {
                 this.users = users;
 
                 connection.getUsers("USER_INACTIVE").then((users) => {
-
                     this.users.push(...users);
 
                     this.view = this.getView(this.users);
                 });
-            })
+            });
         } else {
             this.view = this.getView([]);
         }
     }
     getView(users: IUser[] | []): Component {
-
         if (users.length !== 0) {
             users.forEach((user) => {
                 if (user.login === this.parent.user.login) {

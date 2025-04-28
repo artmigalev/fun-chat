@@ -9,7 +9,7 @@ const app: INode = {
     className: "app",
 };
 export default class App extends Component {
-    user: IUser
+    user: IUser;
     constructor() {
         super(app);
         this.user = Object.create({});

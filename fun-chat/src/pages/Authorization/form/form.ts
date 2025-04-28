@@ -41,8 +41,8 @@ export default class FormAuth extends Component {
         e.preventDefault();
         const login = this.inputLogin.checkInput();
         const password = this.inputPassword.checkInput();
-       
+
         this.parent.createdUSer(login, password);
-        console.log('created user');
+        console.log("created user");
     }
 }

@@ -6,6 +6,7 @@ import Main from "./main/main";
 import Footer from "./footer/foooter";
 import App from "@/app/app";
 import { connection } from "@/main";
+import Authorization from "../Authorization/Authorization";
 const homePage: INode = {
     tag: "div",
     className: "home-page",
@@ -17,7 +18,7 @@ export default class Home extends Component {
     protected main: Main;
     protected parent: App;
     footer: Footer;
-    constructor( parent: App) {
+    constructor(parent: App) {
         super(homePage);
         this.parent = parent;
         this.user = this.parent.user;
@@ -30,12 +31,9 @@ export default class Home extends Component {
         this.appendChildren([this.header, this.main, this.footer]);
     }
     exit(user: IUser) {
+        connection.userIsLogout(user);
         this.parent.removeChildren();
-        if (connection.OPEN) {
-            connection.userIsLogout(user)?.then((isLogined) => {
-                console.log(isLogined);
-            });
-        }
-        // this.parent.append(new Authorization(this.parent));
+        localStorage.removeItem("authToken");
+        this.parent.append(new Authorization(this.parent));
     }
 }

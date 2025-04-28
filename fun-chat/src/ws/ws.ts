@@ -6,7 +6,7 @@ export default class WS extends WebSocket {
         super(str);
     }
     run() {
-        this.onopen = (e) => {
+        this.onopen = () => {
             const app = new App();
             app.start();
 
@@ -15,7 +15,6 @@ export default class WS extends WebSocket {
                 const { type, payload } = serverResponse;
                 switch (type) {
                     case "USER_EXTERNAL_LOGIN":
-                        
                         alert("USER_EXTERNAL_LOGIN");
                         break;
                     case "USER_EXTERNAL_LOGOUT":
@@ -82,8 +81,9 @@ export default class WS extends WebSocket {
             this.send(JSON.stringify(msg));
             return new Promise((resolve, reject) => {
                 this.addEventListener("message", (e: MessageEvent) => {
+                    console.log(e.data);
                     try {
-                        const { isLogined } = e.data.payload.user;
+                        const { isLogined } = JSON.parse(e.data).payload.user;
 
                         resolve(isLogined);
                     } catch (error) {
@@ -97,9 +97,9 @@ export default class WS extends WebSocket {
 
     userIsLogout(user: IUser) {
         if (this.OPEN) {
-            console.log(user);
+            console.log(user, "logout");
             const message = {
-                id: user.id,
+                id: `${user.login} - ${new Date().toISOString()}`,
                 type: "USER_LOGOUT",
                 payload: {
                     user: {
@@ -109,9 +109,15 @@ export default class WS extends WebSocket {
                 },
             };
             this.send(JSON.stringify(message));
+            return new Promise((resolve, reject) => {
+                this.addEventListener("message", (e: MessageEvent) => {
+                    console.log(e.data);
+                });
+            });
         }
     }
-    userAuthenticated(user: IUser) {// проверка на авторизацию
+    userAuthenticated(user: IUser) {
+        // проверка на авторизацию
         if (this.OPEN) {
             const message = {
                 id: user.id,
@@ -142,7 +148,8 @@ export default class WS extends WebSocket {
             });
         }
     }
-    userLogouted(user: IUser) {// пользователь вышел из системы
+    userLogouted(user: IUser) {
+        // пользователь вышел из системы
         if (this.OPEN) {
             const message = {
                 id: user.id,
@@ -167,15 +174,18 @@ export default class WS extends WebSocket {
             });
         }
     }
-    getAllAuthenticatedUsers() { // получение всех авторизованных пользователей
+    getAllAuthenticatedUsers() {
+        // получение всех авторизованных пользователей
         return this.getUsers("USER_ACTIVE").then((users) => console.log(users));
     }
-    gettingAllUnauthorizedUsers() {// получение всех не авторизованных пользователей
+    getAllUnauthorizedUsers() {
+        // получение всех не авторизованных пользователей
         return this.getUsers("USER_INACTIVE").then((users) =>
             console.log(users),
         );
     }
-    sendingMessageToUser(user: IUser, string: string) {// отправка сообщения
+    sendingMessageToUser(user: IUser, string: string) {
+        // отправка сообщения
         const message = {
             id: user.id,
             type: "MSG_SEND",
@@ -199,7 +209,8 @@ export default class WS extends WebSocket {
             });
         });
     }
-    async fetchingMessageHistoryWithUser(user: IUser) {// получение истории сообщений
+    async fetchingMessageHistoryWithUser(user: IUser) {
+        // получение истории сообщений
         const message = {
             id: user.id,
             type: "MSG_FROM_USER",

@@ -15,7 +15,7 @@ export type IUser = {
     // token: string;
     // isLogined: boolean;
     [key: string]: string | boolean;
-}
+};
 
 export interface IHeader {
     view: Component;

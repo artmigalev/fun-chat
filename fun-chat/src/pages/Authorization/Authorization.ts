@@ -49,6 +49,7 @@ export default class Authorization extends Component {
         if (connection.OPEN) {
             connection?.addNewUser(user)?.then((isLogined) => {
                 if (isLogined) {
+                    user.isLogined = isLogined as boolean;
                     this.parent.removeChildren();
                     this.parent.user = user;
                     this.parent.append(new Home(this.parent));

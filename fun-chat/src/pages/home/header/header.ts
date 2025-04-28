@@ -31,7 +31,7 @@ export default class Header extends Component implements IHeader {
     view: Component;
     parent: Home;
     user: IUser;
-    constructor( parent: Home) {
+    constructor(parent: Home) {
         super(header.node);
         this.parent = parent;
         this.user = this.parent.user;
@@ -49,10 +49,9 @@ export default class Header extends Component implements IHeader {
         return wrapper;
     }
 
-    getUser(user: IUser ) {
+    getUser(user: IUser) {
         const nameUSer = new Component({ tag: "span", className: "user-name" });
-        if ('login' in user && typeof user.login === "string" ) {
-
+        if ("login" in user && typeof user.login === "string") {
             nameUSer.setText(user.login);
         }
         return nameUSer;
