@@ -23,10 +23,10 @@
         /* Aliases */
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"],
-            "@page/*": ["/src/pages/*"],
-            "@component/*": ["/src/component/*"],
-            "@assets/*": ["/src/assets/*"]
+            "@/*": ["/src"],
+            "@components/*": ["/src/app/components/*"],
+            "@utils/*": ["/src/app/utils/*"],
+            "@pages/*": ["/src/pages/*"]
         }
     },
     "include": ["src", "./vite.config.js"],

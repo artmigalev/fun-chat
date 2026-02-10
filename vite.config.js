@@ -7,7 +7,8 @@ export default defineConfig({
     base: "fun-chat",
     mode: "development",
     server: {
-        port: 3000,
+        // port: 3000,
+        port: 4000,
         open: true,
         hmr: true,
     },
@@ -18,10 +19,10 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": "/src",
-            "@component": "/src/component/component.ts",
-            "@assets": "/src/assets",
-            "@utils": "/src/utils",
-            "@home": "/src/pages/home",
+            "@component": "/src/app/components/**",
+            "@utils": "/src/app/utils/**",
+            "@home": "/src/pages/home/**",
+            "@pages": "/src/pages/**",
         },
     },
     plugins: [
