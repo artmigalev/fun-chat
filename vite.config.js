@@ -1,16 +1,24 @@
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths"; // Плагин для поддержки путей из tsconfig.json
-import eslintPlugin from "vite-plugin-eslint";
-import svgr from "vite-plugin-svgr";
+import eslint from "vite-plugin-eslint2";
+
 export default defineConfig({
     root: "./",
     base: "fun-chat",
     mode: "development",
     server: {
-        // port: 3000,
-        port: 4000,
+        port: 3000,
+        // port: 4000,
         open: true,
-        hmr: true,
+        hmr: {
+            overlay: true, // показывать ошибки в браузере
+        },
+        watch: {
+            usePolling: true,
+        },
+    },
+    optimizeDeps: {
+        force: true, // принудительная оптимизация зависимостей
     },
     build: {
         outDir: "./public",
@@ -25,17 +33,6 @@ export default defineConfig({
             "@pages": "/src/pages/**",
         },
     },
-    plugins: [
-        tsconfigPaths(),
-        eslintPlugin(),
-        svgr({
-            exportAsDefault: true,
-            svgo: true, // Оптимизация SVG
-            svgoConfig: {
-                plugins: [
-                    { removeViewBox: false }, // Сохраняем viewBox
-                ],
-            },
-        }),
-    ],
+    plugins: [tsconfigPaths(), eslint()],
+    
 });
