@@ -1,0 +1,70 @@
+:root {
+    --md-sys-color-primary: #5ce077;
+    --md-sys-color-on-primary: #003912;
+    --md-sys-color-primary-container: #00531e;
+    --md-sys-color-on-primary-container: #7afd90;
+    --md-sys-color-secondary: #b8ccb5;
+    --md-sys-color-on-secondary: #243424;
+    --md-sys-color-secondary-container: #3a4b3a;
+    --md-sys-color-on-secondary-container: #d4e8d0;
+    --md-sys-color-tertiary: #a1ced6;
+    --md-sys-color-on-tertiary: #00363d;
+    --md-sys-color-tertiary-container: #1f4d54;
+    --md-sys-color-on-tertiary-container: #bdeaf3;
+    --md-sys-color-error: #ffb4ab;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #ffb4ab;
+    --md-sys-color-background: #1a1c19;
+    --md-sys-color-on-background: #e2e3dd;
+    --md-sys-color-surface: #1a1c19;
+    --md-sys-color-on-surface: #e2e3dd;
+    --md-sys-color-surface-variant: #424940;
+    --md-sys-color-on-surface-variant: #c1c9be;
+    --md-sys-color-outline: #8c9389;
+    --md-sys-color-outline-variant: #424940;
+    --md-sys-color-shadow: #000000;
+    --md-sys-color-scrim: #000000;
+    --md-sys-color-inverse-surface: #e2e3dd;
+    --md-sys-color-inverse-on-surface: #2f312d;
+    --md-sys-color-inverse-primary: #006e2a;
+
+    /* SIZE */
+
+    /* Display */
+    --md-sys-typescale-display-large-font: Roboto, sans-serif;
+    --md-sys-typescale-display-large-size: 57px;
+    --md-sys-typescale-display-large-line-height: 64px;
+    --md-sys-typescale-display-large-weight: 400;
+
+    /* Headline */
+    --md-sys-typescale-headline-large-size: 32px;
+    --md-sys-typescale-headline-medium-size: 28px;
+
+    /* Body */
+    --md-sys-typescale-body-medium-size: 1rem;
+    --md-sys-typescale-body-medium-line-height: 1.5rem;
+
+    --md-sys-typescale-body-large-size: 16px;
+    --md-sys-typescale-body-medium-size: 14px;
+
+    /* SHAPE */
+    /* --md-sys-shape-corner-none: 0px;
+    --md-sys-shape-corner-extra-small: 10px;
+    --md-sys-shape-corner-small: 25px;
+    --md-sys-shape-corner-medium: 50px;
+    --md-sys-shape-corner-large: 70px;
+    --md-sys-shape-corner-extra-large: 80px;
+    --md-sys-shape-corner-full: 100px; */
+    --md-sys-shape-corner-small: 4px;
+    --md-sys-shape-corner-medium: 6px;
+    --md-sys-shape-corner-large: 8px;
+
+
+
+    /* list-users */
+    /* --md-list-item-label-text-color: var(--md-sys-color-tertiary);
+    --md-list-container-color: var(--md-sys-color-tertiary-container);
+    --md-list-container-shape: var(--md-sys-shape-corner-large); */
+    
+}
