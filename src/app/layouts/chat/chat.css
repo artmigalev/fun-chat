@@ -1,0 +1,8 @@
+.chat-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 70px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    height: 100%;
+}
