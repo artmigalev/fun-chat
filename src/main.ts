@@ -1,3 +1,4 @@
+import './mat-color-generate/colors-generate';
 import { App } from "./app/app";
 import "@material/web/textfield/filled-text-field.js";
 import "@material/web/button/filled-button.js";

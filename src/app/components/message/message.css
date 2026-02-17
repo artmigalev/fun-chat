@@ -1,11 +1,11 @@
 .msg {
     /* width: 350px; */
-    background: var(--md-sys-color-tertiary-container);
+    background: var(--md-sys-color-primary-container);
     padding: 10px;
     border-radius: var(--md-sys-shape-corner-medium);
 
     .title-from {
-        background-color: var(--md-sys-color-on-tertiary);
+        background-color: var(--md-sys-color-on-primary);
         padding-left: 8px;
         font-weight: bold;
         border-radius: var(--md-sys-shape-corner-medium);

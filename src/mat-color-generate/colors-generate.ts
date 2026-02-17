@@ -1,10 +1,10 @@
 // Get the theme from a hex color
 import { argbFromHex, themeFromSourceColor, applyTheme } from "@material/material-color-utilities";
 
-const theme = themeFromSourceColor(argbFromHex("#54D870"), [
+const theme = themeFromSourceColor(argbFromHex("#00363D"), [
     {
         name: "custom-1",
-        value: argbFromHex("#54D870"),
+        value: argbFromHex("#00363D"),
         blend: true,
     },
 ]);
