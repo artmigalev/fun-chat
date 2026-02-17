@@ -1,23 +1,22 @@
 .msg {
-
-    width:max-content;
+    /* width: 350px; */
     background: var(--md-sys-color-tertiary-container);
     padding: 10px;
     border-radius: var(--md-sys-shape-corner-medium);
 
     .title-from {
-      background-color:var(--md-sys-color-on-tertiary) ;
-      padding-left: 8px;
-      font-weight: bold;
-      border-radius: var(--md-sys-shape-corner-medium);
+        background-color: var(--md-sys-color-on-tertiary);
+        padding-left: 8px;
+        font-weight: bold;
+        border-radius: var(--md-sys-shape-corner-medium);
     }
-    .text-msg{
-      max-width: 30rem;
+    .text-msg {
+        max-width: 30rem;
     }
-    .date{
-      font-style: italic;
-      text-align: end;
-      width: 100%;
-      display: block;
+    .date {
+        font-style: italic;
+        text-align: end;
+        width: 100%;
+        display: block;
     }
 }

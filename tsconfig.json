@@ -28,10 +28,10 @@
             "@components/*": ["src/app/components/*"],
             "@utils/*": ["src/app/utils/*"],
             "@pages/*": ["src/pages/*"],
-            "@assets/*":["src/assets/*"],
-            "@assets":["src/assets/index.ts"]
+            "@assets/*": ["src/assets/*"],
+            "@assets": ["src/assets/index.ts"]
         }
     },
-    "include": ["src", "./vite.config.js"],
+    "include": ["src", "vite.config.js"],
     "exclude": ["node_modules", "public"]
 }

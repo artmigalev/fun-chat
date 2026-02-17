@@ -1,11 +1,9 @@
-
 @import "./layouts/chat/chat.css";
 @import "./components/index";
 @import "./pages/home/home";
 
-
-.app{
-  height: 100%;
-  max-width: 1280px;
-
+.app {
+    height: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
 }

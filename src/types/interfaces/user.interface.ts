@@ -4,7 +4,6 @@ export interface User {
     isLogined?: boolean;
 }
 
-
 export interface UserAuthRequest {
     id: string;
     type: "USER_LOGIN";
@@ -29,7 +28,7 @@ export interface UserAuthResponseErrors {
     id: string;
     type: "ERROR";
     payload: {
-        error: string
+        error: string;
     };
 }
 export interface UserLogoutRequest {
@@ -42,22 +41,22 @@ export interface UserLogoutRequest {
         };
     };
 }
-export interface UserLogoutResponse{
-  id: string,
-  type: "USER_LOGOUT",
-  payload: {
-    user :{
-      login: string,
-      isLogined: boolean,
-    }
-  }
+export interface UserLogoutResponse {
+    id: string;
+    type: "USER_LOGOUT";
+    payload: {
+        user: {
+            login: string;
+            isLogined: boolean;
+        };
+    };
 }
-export interface UserLogoutResponseError{
-  id: string,
-  type: "ERROR",
-  payload: {
-    error: "there is no user with this login",
-  }
+export interface UserLogoutResponseError {
+    id: string;
+    type: "ERROR";
+    payload: {
+        error: "there is no user with this login";
+    };
 }
 export interface UserExternalLoginRequest {
     id: null;
@@ -79,6 +78,3 @@ export interface UserExternalLogoutRequest {
         };
     };
 }
-
-
-

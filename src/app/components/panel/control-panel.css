@@ -1,0 +1,26 @@
+.panel {
+    display: flex;
+}
+:root {
+    --md-filled-text-field-focus-active-indicator-color: var(--md-sys-color-on-tertiary);
+    --md-filled-text-field-container-color: var(--md-sys-color-secondary);
+    --md-filled-text-field-label-text-color: var(--md-sys-color-on-tertiary);
+    --md-filled-text-field-input-text-color: var(--md-sys-color-surface-variant);
+    --md-filled-text-field-hover-input-text-color: var(--md-sys-color-surface-variant);
+    --md-filled-text-field-hover-label-text-color: var(--md-sys-color-surface-variant);
+    --md-filled-text-field-focus-label-text-color: var(--md-sys-color-tertiary-container);
+    --md-filled-text-field-hover-caret-color: var(--md-sys-color-surface-variant);
+    --md-filled-text-field-focus-input-text-color: var(--md-sys-color-surface-variant);
+    --md-filled-text-field-container-shape: var(--md-sys-shape-corner-large);
+    --md-filled-text-field-container-shape: var(--md-sys-shape-corner-large);
+
+    --md-filled-button-container-color: var(--md-sys-color-tertiary-container);
+    --md-filled-button-container-shape: var(--md-sys-shape-corner-small);
+    --md-filled-button-label-text-color: var(--md-sys-color-inverse-surface);
+}
+.panel {
+    border-radius: var(--md-sys-shape-corner-large);
+}
+md-filled-button {
+    max-width: 100px;
+}

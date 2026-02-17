@@ -1,8 +1,7 @@
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths"; // Плагин для поддержки путей из tsconfig.json
 import eslintPlugin from "vite-plugin-eslint";
-import svgr from "vite-plugin-svgr";
-
+// import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
     root: "./",
@@ -29,14 +28,14 @@ export default defineConfig({
     plugins: [
         tsconfigPaths(),
         eslintPlugin(),
-        svgr({
-            exportAsDefault: false,
-            svgo: true, // Оптимизация SVG
-            svgoConfig: {
-                plugins: [
-                    { removeViewBox: false }, // Сохраняем viewBox
-                ],
-            },
-        }),
+        // svgr({
+        //     exportAsDefault: false,
+        //     svgo: true, // Оптимизация SVG
+        //     svgoConfig: {
+        //         plugins: [
+        //             { removeViewBox: false }, // Сохраняем viewBox
+        //         ],
+        //     },
+        // }),
     ],
 });

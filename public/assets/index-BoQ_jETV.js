@@ -1,14 +1,11 @@
 var h = Object.defineProperty;
 var a = (n, e, o) =>
-    e in n
-        ? h(n, e, { enumerable: !0, configurable: !0, writable: !0, value: o })
-        : (n[e] = o);
+    e in n ? h(n, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : (n[e] = o);
 var i = (n, e, o) => a(n, typeof e != "symbol" ? e + "" : e, o);
 (function () {
     const e = document.createElement("link").relList;
     if (e && e.supports && e.supports("modulepreload")) return;
-    for (const t of document.querySelectorAll('link[rel="modulepreload"]'))
-        r(t);
+    for (const t of document.querySelectorAll('link[rel="modulepreload"]')) r(t);
     new MutationObserver((t) => {
         for (const s of t)
             if (s.type === "childList")
@@ -40,7 +37,7 @@ class d {
         i(this, "node", null);
         i(this, "childNodes", []);
         const t = document.createElement(e);
-        (t.className = o), (this.node = t), r && this.appendChildren(r);
+        ((t.className = o), (this.node = t), r && this.appendChildren(r));
     }
     getNode() {
         return () => {
@@ -50,7 +47,7 @@ class d {
     }
     append(e) {
         if (this.node === null) throw new Error("Node is null");
-        this.childNodes.push(e), this.node.append(e.getNode()());
+        (this.childNodes.push(e), this.node.append(e.getNode()()));
     }
     appendChildren(e) {
         e.forEach((o) => {
@@ -77,10 +74,10 @@ class d {
         this.node.remove();
     }
     removeChildren() {
-        this.childNodes.forEach((e) => {
+        (this.childNodes.forEach((e) => {
             e.destroy();
         }),
-            (this.childNodes.length = 0);
+            (this.childNodes.length = 0));
     }
     remove() {
         this.removeChildren();
@@ -100,7 +97,7 @@ class p extends d {
     constructor() {
         super(u);
         i(this, "view");
-        (this.view = this.getView()), this.append(this.view);
+        ((this.view = this.getView()), this.append(this.view));
     }
     getView() {
         return new d(c);
@@ -121,7 +118,7 @@ class g extends d {
         super(w);
         i(this, "authorization");
         i(this, "home");
-        (this.authorization = new p()), (this.home = new m());
+        ((this.authorization = new p()), (this.home = new m()));
     }
     start() {
         document.body.appendChild(this.getNode()());

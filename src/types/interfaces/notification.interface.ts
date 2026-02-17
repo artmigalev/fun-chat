@@ -1,16 +1,16 @@
-export interface NotificationMsgDeleteRequest{
-  id: null,
-  type: "MSG_DELETE"
-  payload: {
-    message: {
-      id: string,
-      status: {
-        isDeleted: boolean,
-      }
-    }
-  }
+export interface NotificationMessageDeleteRequest {
+    id: null;
+    type: "MSG_DELETE";
+    payload: {
+        message: {
+            id: string;
+            status: {
+                isDeleted: boolean;
+            };
+        };
+    };
 }
-export interface NotificationMsgReadDeliverRequest {
+export interface NotificationMessageReadDeliverRequest {
     id: null;
     type: "MSG_READ";
     payload: {
@@ -22,14 +22,14 @@ export interface NotificationMsgReadDeliverRequest {
         };
     };
 }
-export interface NotificationMsgReadResponseError {
+export interface NotificationMessageReadResponseError {
     id: string;
     type: "ERROR";
     payload: {
         error: string;
     };
 }
-export interface NotificationMsgReadResponse {
+export interface NotificationMessageReadResponse {
     id: string;
     type: "MSG_READ";
     payload: {
@@ -41,7 +41,7 @@ export interface NotificationMsgReadResponse {
         };
     };
 }
-export interface NotificationMsgDeliverRequest {
+export interface NotificationMessageDeliverRequest {
     id: null;
     type: "MSG_DELIVER";
     payload: {
@@ -53,7 +53,7 @@ export interface NotificationMsgDeliverRequest {
         };
     };
 }
-export interface NotificationMsgReadRequest {
+export interface NotificationMessageReadRequest {
     id: string;
     type: "MSG_READ";
     payload: {
@@ -62,16 +62,16 @@ export interface NotificationMsgReadRequest {
         };
     };
 }
-export interface NotificationMsgChangeRequest{
-  id: null,
-  type: "MSG_EDIT"
-  payload: {
-    message: {
-      id: string,
-      text: string,
-      status: {
-        isEdited: boolean,
-      }
-    }
-  }
+export interface NotificationMessageChangeRequest {
+    id: null;
+    type: "MSG_EDIT";
+    payload: {
+        message: {
+            id: string;
+            text: string;
+            status: {
+                isEdited: boolean;
+            };
+        };
+    };
 }

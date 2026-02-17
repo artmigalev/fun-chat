@@ -3,5 +3,5 @@
     --md-list-container-color: var(--md-sys-color-on-tertiary);
 }
 md-list {
-    border-radius:var(--md-sys-shape-corner-large);
+    border-radius: var(--md-sys-shape-corner-large);
 }

@@ -1,7 +1,7 @@
 @import "./profile/profile";
 @import "./chat-display/chat-display.css";
-@import "./panel/controlPanel.css";
-@import "./side-bar/sideBar";
-@import "./users-list/userList";
+@import "./panel/control-panel.css";
+@import "./side-bar/side-bar.css";
+@import "./users-list/user-list.css";
 @import "./message/message.css";
 @import "./view/view.css";

@@ -2,15 +2,13 @@
 @import "./app/app.css";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
-
-
 :root {
     --md-ref-typeface-brand: "Roboto";
     --md-ref-typeface-plain: system-ui;
 }
 
 html {
-    font-size:var(--md-sys-typescale-);
+    font-size: var(--md-sys-typescale-);
     font-family: var(--md-ref-typeface-brand);
     height: 100%;
 }
@@ -20,7 +18,6 @@ body {
     height: 100vh;
     background-color: var(--md-sys-color-on-background);
     overflow: hidden;
-    padding: 10px;
 }
 * {
     width: 100%;

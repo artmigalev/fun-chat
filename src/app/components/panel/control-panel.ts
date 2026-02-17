@@ -1,11 +1,11 @@
 import { Component } from "../component";
 
 export class ControlPanel extends Component {
-    #sendBtn: Component;
-    #textInput: Component;
+    // #sendBtn: Component;
+    // #textInput: Component;
 
     constructor() {
-        const btn = new Component({
+        const button = new Component({
             tag: "md-filled-button",
             className: "send-btn-msg",
             text: "Send",
@@ -18,16 +18,14 @@ export class ControlPanel extends Component {
                 label: "Message",
                 type: "textarea",
                 resize: "vertical",
-                rows: '3',
+                rows: "3",
             },
-            styles: {
-            },
+            styles: {},
         });
-        textContainer.setProps({
-        });
+        textContainer.setProps({});
 
-        super({tag:'form', className: "panel" }, textContainer, btn);
-        this.#sendBtn = btn;
-        this.#textInput = textContainer;
+        super({ tag: "form", className: "panel" }, textContainer, button);
+        // this.#sendBtn = btn;
+        // this.#textInput = textContainer;
     }
 }

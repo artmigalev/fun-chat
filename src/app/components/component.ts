@@ -54,8 +54,8 @@ export class Component {
     setHTML(html: string) {
         this.getNode().innerHTML = html;
     }
-    setProps(props: Record<string, unknown>) {
-        Object.assign(this, props);
+    setProps(properties: Record<string, unknown>) {
+        Object.assign(this, properties);
     }
     setText(content: string) {
         if (this.#node === null) {

@@ -1,5 +1,5 @@
-import { IMassage } from "@/types/interfaces";
-import { Component } from "../component";
+import { Message as Msg } from "@/types/interfaces/message.interface";
+import { Component } from "@components/component";
 
 export default class Message extends Component {
     // #id: string;
@@ -8,7 +8,7 @@ export default class Message extends Component {
     #datetime: Component;
     // #status: Component;
 
-    constructor(data: IMassage) {
+    constructor(data: Msg) {
         const title = new Component({
             tag: "h5",
             className: "title-from",
@@ -24,7 +24,7 @@ export default class Message extends Component {
         this.#textContent = textContent;
         this.#datetime = dateTime;
 
-        const { from, text, datetime } = data;
+        const { id, from, text, datetime } = data;
         // this.#id = id;
         this.#title.setText(from);
         this.#textContent.setText(text);

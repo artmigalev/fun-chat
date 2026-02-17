@@ -1,4 +1,4 @@
-export interface Msg {
+export interface Message {
     id: string;
     from: string;
     to: string;
@@ -11,7 +11,7 @@ export interface Msg {
     };
 }
 
-export interface MsgSendUserRequest {
+export interface MessageSendUserRequest {
     id: string;
     type: "MSG_SEND";
     payload: {
@@ -21,28 +21,28 @@ export interface MsgSendUserRequest {
         };
     };
 }
-export interface MsgSendUserResponse {
+export interface MessageSendUserResponse {
     id: string;
     type: "MSG_SEND";
     payload: {
-        message: Msg;
+        message: Message;
     };
 }
-export interface MsgSendUserResponseError {
+export interface MessageSendUserResponseError {
     id: string;
     type: "ERROR";
     payload: {
         error: string;
     };
 }
-export interface MsgFromUserRequest {
+export interface MessageFromUserRequest {
     id: null;
     type: "MSG_SEND";
     payload: {
-        message: Msg;
+        message: Message;
     };
 }
-export interface MsgHistoryFromUserRequest {
+export interface MessageHistoryFromUserRequest {
     id: string;
     type: "MSG_FROM_USER";
     payload: {
@@ -52,21 +52,21 @@ export interface MsgHistoryFromUserRequest {
     };
 }
 
-export interface MsgHistoryFromUserResponse {
+export interface MessageHistoryFromUserResponse {
     id: string;
     type: "MSG_FROM_USER";
     payload: {
         messages: [];
     };
 }
-export interface MsgHistoryFromUserResponseError {
+export interface MessageHistoryFromUserResponseError {
     id: string;
     type: "ERROR";
     payload: {
         error: string;
     };
 }
-export interface MsgCountNotReadFromUserRequest {
+export interface MessageCountNotReadFromUserRequest {
     id: string;
     type: "MSG_COUNT_NOT_READED_FROM_USER";
     payload: {
@@ -75,14 +75,14 @@ export interface MsgCountNotReadFromUserRequest {
         };
     };
 }
-export interface MsgCountNotReadFromUserResponse {
+export interface MessageCountNotReadFromUserResponse {
     id: string;
     type: "MSG_COUNT_NOT_READED_FROM_USER";
     payload: {
         count: number;
     };
 }
-export interface MsgCountNotReadFromUserResponseError {
+export interface MessageCountNotReadFromUserResponseError {
     id: string;
     type: "ERROR";
     payload: {
@@ -90,7 +90,7 @@ export interface MsgCountNotReadFromUserResponseError {
     };
 }
 
-export interface MsgDeleteRequest {
+export interface MessageDeleteRequest {
     id: string;
     type: "MSG_DELETE";
     payload: {
@@ -99,7 +99,7 @@ export interface MsgDeleteRequest {
         };
     };
 }
-export interface MsgDeleteResponse {
+export interface MessageDeleteResponse {
     id: string;
     type: "MSG_DELETE";
     payload: {
@@ -111,14 +111,14 @@ export interface MsgDeleteResponse {
         };
     };
 }
-export interface MsgDeleteResponseError {
+export interface MessageDeleteResponseError {
     id: string;
     type: "ERROR";
     payload: {
         error: string;
     };
 }
-export interface MsgChangeResponseRequest {
+export interface MessageChangeResponseRequest {
     id: string;
     type: "MSG_EDIT";
     payload: {
@@ -128,7 +128,7 @@ export interface MsgChangeResponseRequest {
         };
     };
 }
-export interface MsgChangeResponseResponse {
+export interface MessageChangeResponseResponse {
     id: string;
     type: "MSG_EDIT";
     payload: {
@@ -141,7 +141,7 @@ export interface MsgChangeResponseResponse {
         };
     };
 }
-export interface MsgChangeResponseResponseError {
+export interface MessageChangeResponseResponseError {
     id: string;
     type: "ERROR";
     payload: {

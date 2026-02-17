@@ -3,7 +3,7 @@ import { Component } from "../component";
 import Message from "@components/message/message";
 
 export class View extends Component {
-    #item: Component;
+    // #item: Component;
     constructor(messages: [] | IMassage[]) {
         const item = new Component({
             tag: "md-list-item",
@@ -16,16 +16,16 @@ export class View extends Component {
             },
             item,
         );
-        this.#item = item;
+        // this.#item = item;
         const items = this.renderItemsWithMsgs(messages, item);
         this.appendChildren(items);
     }
 
     renderItemsWithMsgs(msgs: IMassage[], item: Component): Component[] {
-        if (!msgs.length) console.log("messages empty");
-        return msgs.map((msg) => {
+        if (msgs.length === 0) console.log("messages empty");
+        return msgs.map((message) => {
             item.getNode().innerHTML = "";
-            item.append(new Message(msg));
+            item.append(new Message(message));
             return item;
         });
     }

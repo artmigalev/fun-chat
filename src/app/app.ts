@@ -2,7 +2,14 @@ import { Component } from "./components/component";
 import Home from "./pages/home/home";
 
 export class App extends Component {
+    // #home: Home;
     constructor() {
-        super({ tag: "div", className: "app" }, new Home());
+        const home = new Home();
+        super({ tag: "div", className: "app" }, home);
+        // this.#home = home;
+    }
+
+    render(page: Component) {
+        this.append(page);
     }
 }

@@ -1,7 +1,7 @@
 import { Component } from "../component";
 
 export class UserList extends Component {
-    #listItems: Component[];
+    // #listItems: Component[];
 
     constructor(users: string[] = []) {
         super({
@@ -16,7 +16,7 @@ export class UserList extends Component {
 
         const items = this.generateList(users);
         this.appendChildren(items);
-        this.#listItems = this.getChild();
+        // this.#listItems = this.getChild();
     }
 
     generateList(users: string[]): Component[] {
@@ -24,7 +24,6 @@ export class UserList extends Component {
             const item = new Component({
                 tag: "md-list-item",
                 className: "user-item",
-               
             });
             item.setText(user);
             return item;

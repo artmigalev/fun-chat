@@ -253,9 +253,8 @@ export default class WS extends WebSocket {
         console.log(this);
     }
     run() {
-        this.addEventListener('open', (event) => {
+        this.addEventListener("open", (event) => {
             console.log(event);
-            
-        })
+        });
     }
 }
