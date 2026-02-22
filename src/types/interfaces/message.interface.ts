@@ -1,3 +1,5 @@
+import { MsgType } from "@/app/enum/message.enum";
+
 export interface Message {
     id: string;
     from: string;
@@ -148,3 +150,26 @@ export interface MessageChangeResponseResponseError {
         error: string;
     };
 }
+
+export interface GeneralMessageRequest {
+    id: string;
+    type: MsgType;
+    payload:
+        | MessageChangeResponseRequest["payload"]
+        | MessageDeleteRequest["payload"]
+        | MessageCountNotReadFromUserRequest["payload"]
+        | MessageHistoryFromUserRequest["payload"]
+        | MessageFromUserRequest["payload"]
+        | MessageSendUserRequest["payload"];
+}
+export type GeneralMessageResponse =
+    | MessageChangeResponseResponse
+    | MessageChangeResponseResponse
+    | MessageDeleteResponseError
+    | MessageDeleteResponse
+    | MessageCountNotReadFromUserResponseError
+    | MessageCountNotReadFromUserResponse
+    | MessageHistoryFromUserResponseError
+    | MessageHistoryFromUserResponse
+    | MessageSendUserResponseError
+    | MessageSendUserResponse;

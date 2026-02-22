@@ -1,3 +1,5 @@
+import { NotifyType } from "@/app/enum/notification.enum";
+
 export interface NotificationMessageDeleteRequest {
     id: null;
     type: "MSG_DELETE";
@@ -75,3 +77,20 @@ export interface NotificationMessageChangeRequest {
         };
     };
 }
+
+export interface GeneralNotificationRequest {
+    id: string;
+    type: NotifyType;
+    payload: {
+        message: {
+            id: string;
+            status?: {
+                isDeleted?: boolean;
+                isEdited?: boolean;
+                isDelivered?: boolean;
+                isReaded?:boolean
+            };
+        };
+    };
+}
+export type GeneralNotificationResponse = NotificationMessageReadResponseError | NotificationMessageReadResponse

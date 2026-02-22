@@ -1,4 +1,8 @@
+import { AuthenticationService } from "@/app/api/services/auth";
 import { Component } from "@/app/components/component";
+import { UserType } from "@/app/enum/user.enum";
+import Router from "@/app/router/router";
+import { loginValidator } from "@/app/utils/validator";
 import { User } from "@/types/interfaces/user.interface";
 import { TextField } from "@material/web/textfield/internal/text-field";
 
@@ -6,8 +10,12 @@ export class AuthenticationPage extends Component {
     #form: Component;
     #fieldTextUserName: Component;
     #fieldTextUserPassword: Component;
+    #authService: AuthenticationService;
+    #router: Router
+    constructor(router:Router) {
+        console.log('instance login-page');
 
-    constructor() {
+
         const fieldUserName = new Component({
             tag: "md-filled-text-field",
             className: "username",
@@ -15,6 +23,8 @@ export class AuthenticationPage extends Component {
                 label: "Username",
                 type: "text",
                 required: "true",
+                minlength: "3",
+                maxlength: "8",
             },
         });
         const fieldUserPassword = new Component({
@@ -23,7 +33,9 @@ export class AuthenticationPage extends Component {
             attrs: {
                 label: "Password",
                 type: "password",
-                required:'true',
+                required: "true",
+                minlength: "3",
+                maxlength: "16",
             },
         });
 
@@ -39,11 +51,11 @@ export class AuthenticationPage extends Component {
         const formLogin = new Component({ tag: "form", className: "form-login" });
 
         super({ tag: "div", className: "auth-page" }, formLogin);
-
+        this.#router = router
+        this.#authService = new AuthenticationService();
         this.#fieldTextUserName = fieldUserName;
         this.#fieldTextUserPassword = fieldUserPassword;
         this.#form = formLogin;
-        this.login.bind(this);
         this.btnListener();
 
         this.#form.appendChildren([fieldUserName, fieldUserPassword, buttonSubmit]);
@@ -53,9 +65,8 @@ export class AuthenticationPage extends Component {
         this.#form.addListener("submit", this.login);
     }
 
-    login = (event: Event) => {
+    login = async (event: Event) => {
         event.preventDefault();
-        console.log(event);
 
         const userNameFieldComponent = this.#fieldTextUserName.getNode() as TextField;
         const userPasswordFieldComponent = this.#fieldTextUserPassword.getNode() as TextField;
@@ -63,7 +74,21 @@ export class AuthenticationPage extends Component {
         const userCredential: User = {
             login: userNameFieldComponent.value || "",
             password: userPasswordFieldComponent.value || "",
-      };
-      return userCredential
+        };
+
+        const valid = loginValidator(userCredential);
+        if (valid) {
+            const response = await this.#authService.addUser(userCredential);
+
+            if (response.type === UserType.ERROR) {
+                userNameFieldComponent.error = true;
+                userNameFieldComponent.errorText = response.payload.error;
+            }
+            if (response.type === UserType.USER_LOGIN) {
+                this.#router.navigate('home')
+            }
+
+            // console.log(response);
+        }
     };
 }

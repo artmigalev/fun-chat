@@ -24,7 +24,7 @@ export default class Message extends Component {
         this.#textContent = textContent;
         this.#datetime = dateTime;
 
-        const { id, from, text, datetime } = data;
+        const {  from, text, datetime } = data;
         // this.#id = id;
         this.#title.setText(from);
         this.#textContent.setText(text);

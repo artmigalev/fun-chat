@@ -1,15 +1,22 @@
 import { Component } from "./components/component";
-import { AuthenticationPage } from "./pages/authentication/auth-page";
+import Router from "./router/router";
 // import Home from "./pages/home/home";
 
 export class App extends Component {
     // #home: Home;
+    // #user: User
+    #router:Router
     constructor() {
-        // const home = new Home();
-        const loginPage = new  AuthenticationPage();
-        super({ tag: "div", className: "app" },loginPage, );
+        super({ tag: "div", className: "app", attrs:{id : 'app'} } );
+        console.log('instance App',);
+
+        this.#router = new Router(this)
+        this.#router.navigate('login')
         // this.#home = home;
     }
+
+
+
 
     render(page: Component) {
         this.append(page);

@@ -1,3 +1,5 @@
+import { UserType } from "@/app/enum/user.enum";
+
 export interface User {
     login: string;
     password?: string;
@@ -78,3 +80,16 @@ export interface UserExternalLogoutRequest {
         };
     };
 }
+export interface GeneralUserRequest {
+    id: string;
+    type: UserType;
+    payload: {
+        user: User;
+    };
+}
+export type GeneralUserResponse =
+    | UserAuthResponse
+    | UserAuthResponseErrors
+    | UserLogoutResponse
+    | UserLogoutResponseError
+    | UserExternalLogoutRequest;
