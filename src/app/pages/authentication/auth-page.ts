@@ -1,4 +1,4 @@
-import { AuthenticationService } from "@/app/api/services/auth";
+import { AuthenticationService } from "@/app/api/services/auth.service";
 import { Component } from "@/app/components/component";
 import { UserType } from "@/app/enum/user.enum";
 import Router from "@/app/router/router";
@@ -52,7 +52,7 @@ export class AuthenticationPage extends Component {
 
         super({ tag: "div", className: "auth-page" }, formLogin);
         this.#router = router
-        this.#authService = new AuthenticationService();
+        this.#authService =  AuthenticationService.getInstance();
         this.#fieldTextUserName = fieldUserName;
         this.#fieldTextUserPassword = fieldUserPassword;
         this.#form = formLogin;
