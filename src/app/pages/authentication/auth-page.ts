@@ -85,9 +85,10 @@ export class AuthenticationPage extends Component {
                 userNameFieldComponent.errorText = response.payload.error;
             }
             if (response.type === UserType.USER_LOGIN) {
+                localStorage.setItem('loggedUser', JSON.stringify(response.id))
                 this.#router.navigate('home')
             }
-
+            this.#form.removeListener('submit', this.login)
             // console.log(response);
         }
     };

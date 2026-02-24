@@ -97,7 +97,7 @@ export class Component {
             this.#node.addEventListener(type, listener, options);
         }
     }
-    removeListener(event: string, listener: () => void, options = false) {
+    removeListener(event: string, listener: (_event:Event) => void, options = false) {
         if (this.#node === null) {
             throw new Error("Node is null");
         } else {

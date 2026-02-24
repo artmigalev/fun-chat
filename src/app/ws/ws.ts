@@ -262,7 +262,6 @@ export default class WS extends WebSocket {
         this.addEventListener("open", (event) => {
             console.log(event);
             this.listener();
-            
         });
     }
 
@@ -273,9 +272,18 @@ export default class WS extends WebSocket {
         return WS.#instance;
     }
 
+    waitForOpen() {
+        if (this.readyState === this.OPEN) {
+            return Promise.resolve();
+        }
+        return new Promise((resolve) => {
+            this.addEventListener("open", (event) => resolve(event), { once: true });
+        });
+    }
+
     async sendRequest<T>(request: GeneralRequest): Promise<T> {
         return new Promise<T>((resolve) => {
-            this.#listener.set(request.id, resolve as (value:unknown)=>void);
+            this.#listener.set(request.id, resolve as (value: unknown) => void);
             this.send(JSON.stringify(request));
         });
     }

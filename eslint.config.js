@@ -28,6 +28,7 @@ export default defineConfig([
         rules: {
             ...eslintPluginUnicorn.configs.recommended.rules,
             "unicorn/prevent-abbreviations": "off", // Отключаем
+            'unicorn/no-null': 'off',
             "unicorn/better-regex": "warn",
             "unused-imports/no-unused-imports": "error",
             "unused-imports/no-unused-vars": [

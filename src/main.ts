@@ -8,8 +8,13 @@ import "@material/web/list/list.js";
 import WS from "./app/ws/ws";
 import { App } from "./app/app";
 
+const ws = WS.getInstance();
+await ws.waitForOpen()
+
 const app = new App();
 const appNode = app.getNode()
 document.body.append(appNode);
-const ws = WS.getInstance();
-Object.freeze(ws);
+
+await app.init()
+
+

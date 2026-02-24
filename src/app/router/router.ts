@@ -12,11 +12,13 @@ const routes: { [key: string]: (router:Router) => HomePage | AuthenticationPage 
 export default class Router   {
     #routes = routes;
     #app: App
-    #history:History
+    #history: History
+     baseUri='fun-chat'
     constructor(app:App) {
         // console.log("instance router");
         this.#app = app
         this.#history = history
+
 
 
 
@@ -36,9 +38,13 @@ export default class Router   {
                 this.#app.append(page)
             }
         }
-        this.#history.pushState({},'',`/${route}`)
+        this.#history.pushState({},'',`/${this.baseUri}/${route}`)
 
 
 
+    }
+    redirect(route: string) {
+        // globalThis.location.replace(`/${this.baseUri}/${route}`);
+        this.navigate(route)
     }
 }
