@@ -10,18 +10,35 @@ const routes: { [key: string]: (router:Router) => HomePage | AuthenticationPage 
 
 
 export default class Router   {
+    static #instance:Router
+
+
     #routes = routes;
     #app: App
     #history: History
      baseUri='fun-chat'
-    constructor(app:App) {
-        // console.log("instance router");
+    private constructor(app:App) {
+
+        console.log("instance router");
+        Router.#instance = this
+
         this.#app = app
         this.#history = history
 
 
 
 
+    }
+    static init(app:App) {
+        if (!this.#instance) {
+            this.#instance = new Router(app)
+        }
+        return this.#instance
+
+    }
+    static getInstance() {
+        if(!this.#instance) throw new Error('not instance')
+        return Router.#instance
     }
     navigate(route: string, parent?: Component) {
         console.log('navigate');
