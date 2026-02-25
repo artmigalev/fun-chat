@@ -1,4 +1,4 @@
 .view-container {
-    background: var(--md-sys-color-secondary);
-    border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-secondary);
+  border-radius: var(--md-sys-shape-corner-small);
 }

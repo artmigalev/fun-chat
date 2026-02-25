@@ -9,12 +9,10 @@ import WS from "./app/ws/ws";
 import { App } from "./app/app";
 
 const ws = WS.getInstance();
-await ws.waitForOpen()
+await ws.waitForOpen();
 
 const app = new App();
-const appNode = app.getNode()
+const appNode = app.getNode();
 document.body.append(appNode);
 
-await app.init()
-
-
+await app.init();

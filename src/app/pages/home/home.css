@@ -1,9 +1,23 @@
 @import "/src/app/components/header/header";
 
 .home {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: 4px;
-    padding: 4px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 4px;
+  padding: 4px;
+
+
+
+}
+.header,
+.footer {
+  color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-on-primary);
+  border-radius: var(--md-sys-shape-corner-large);
+  border: 1px solid var(--md-sys-color-secondary-container);
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+
 }

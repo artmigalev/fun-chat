@@ -3,14 +3,14 @@ import { Component } from "@/app/components/component";
 import { ControlPanel } from "@/app/components/panel/control-panel";
 
 export class ChatLayout extends Component {
-    // #controlPanel: ControlPanel;
-    // #display: ChatDisplay;
+  // #controlPanel: ControlPanel;
+  // #display: ChatDisplay;
 
-    constructor() {
-        const panel = new ControlPanel();
-        const display = new ChatDisplay();
-        super({ className: "chat-layout" }, display, panel);
-        // this.#controlPanel = panel;
-        // this.#display = display;
-    }
+  constructor() {
+    const panel = new ControlPanel();
+    const display = new ChatDisplay();
+    super({ className: "chat-layout" }, display, panel);
+    // this.#controlPanel = panel;
+    // this.#display = display;
+  }
 }

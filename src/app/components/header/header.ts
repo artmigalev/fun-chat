@@ -9,54 +9,51 @@ import { Routes } from "@/app/enum/routes.enums";
 import { User } from "@/types/interfaces/user.interface";
 
 export default class Header extends Component {
-    #title: Component;
-    #btnLogout: Component;
-    #userService: UserService;
-    #authService: AuthenticationService;
-    #router: Router;
+  #title: Component;
+  #btnLogout: Component;
+  #userService: UserService;
+  #authService: AuthenticationService;
+  #router: Router;
 
-    constructor(user: User | null   ) {
-        const  profile = new Profile(user);
+  constructor(user: User | null) {
+    const profile = new Profile(user);
 
+    const logout = new Component({ className: "btn-logout" });
+    logout.setHTML(logoutBtn);
+    logout.getNode().firstElementChild?.setAttribute("height", "100%");
+    logout.getNode().firstElementChild?.setAttribute("width", "100%");
 
+    const container = new Component({ className: "header-container" });
 
+    container.append(profile);
+    container.append(logout);
 
-        const logout = new Component({ className: "btn-logout" });
-        logout.setHTML(logoutBtn);
-        logout.getNode().firstElementChild?.setAttribute("height", "100%");
-        logout.getNode().firstElementChild?.setAttribute("width", "100%");
+    const title = new Component({ tag: "h2", className: "header-title" });
 
-        const container = new Component({ className: "header-container" });
+    super({ tag: "header", className: "header" }, title, container);
 
-        container.append(profile)
-        container.append(logout);
+    this.#authService = AuthenticationService.getInstance();
+    this.#userService = UserService.getInstance();
+    this.#router = Router.getInstance();
+    this.#title = title;
+    this.#btnLogout = logout;
+    this.#btnLogout.addListener("click", this.logout);
+    // this.#profile = profile;
 
-        const title = new Component({ tag: "h2", className: "header-title" });
+    this.#title.setText("Fun Chat");
+  }
 
-        super({ tag: "header", className: "header" }, title, container);
-
-        this.#authService = AuthenticationService.getInstance();
-        this.#userService = UserService.getInstance();
-        this.#router = Router.getInstance();
-        this.#title = title;
-        this.#btnLogout = logout;
-        this.#btnLogout.addListener("click", this.logout);
-        // this.#profile = profile;
-
-        this.#title.setText("Fun Chat");
+  logout = async () => {
+    const user = this.#userService.getUser();
+    if (user) {
+      const response = await this.#authService.logout(user);
+      localStorage.clear();
+      if (response.type === UserType.USER_LOGOUT) {
+        this.#userService.userDestroy();
+      }
+      this.#router.navigate(Routes.LOGIN);
     }
-
-    logout = async () => {
-        const user = this.#userService.getUser();
-        if (user) {
-            const response = await this.#authService.logout(user);
-            localStorage.clear();
-            if (response.type === UserType.USER_LOGOUT) {
-                this.#userService.userDestroy();
-            }
-            this.#router.navigate(Routes.LOGIN);
-        }
-        localStorage.clear();
-        this.#router.navigate(Routes.LOGIN);
-    };
+    localStorage.clear();
+    this.#router.navigate(Routes.LOGIN);
+  };
 }

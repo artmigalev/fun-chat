@@ -1,27 +1,27 @@
 .header {
-    color: var(--md-sys-color-primary);
-    background-color: var(--md-sys-color-on-primary);
-    border-radius: var(--md-sys-shape-corner-large);
-    border: 1px solid var(--md-sys-color-secondary-container);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
+  color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-on-primary);
+  border-radius: var(--md-sys-shape-corner-large);
+  border: 1px solid var(--md-sys-color-secondary-container);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
 }
 .header-title {
-    font-size: var(--md-sys-typescale-body-medium-size);
-    width: max-content;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  width: max-content;
 }
 .header-container {
-    width: max-content;
-    gap: 14px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  width: max-content;
+  gap: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .btn-logout {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }

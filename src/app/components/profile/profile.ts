@@ -3,13 +3,13 @@ import { Component } from "@components/component";
 import { User } from "@/types/interfaces/user.interface";
 
 export class Profile extends Component {
-    // #userService :UserService
+  // #userService :UserService
 
-    constructor(user: User | null) {
-        super({ className: "profile" });
-        const name = new Component({ tag: "span", className: "user-name" });
-        name.setText(user?.login || 'No Name')
+  constructor(user: User | null) {
+    super({ className: "profile" });
+    const name = new Component({ tag: "span", className: "user-name" });
+    name.setText(user?.login || "No Name");
 
-        this.append(name)
-    }
+    this.append(name);
+  }
 }

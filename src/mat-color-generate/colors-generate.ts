@@ -2,11 +2,11 @@
 import { argbFromHex, themeFromSourceColor, applyTheme } from "@material/material-color-utilities";
 
 const theme = themeFromSourceColor(argbFromHex("#00363D"), [
-    {
-        name: "custom-1",
-        value: argbFromHex("#00363D"),
-        blend: true,
-    },
+  {
+    name: "custom-1",
+    value: argbFromHex("#00363D"),
+    blend: true,
+  },
 ]);
 // Print out the theme as JSON
 // console.log(JSON.stringify(theme, null, 2));

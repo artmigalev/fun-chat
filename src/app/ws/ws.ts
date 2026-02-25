@@ -250,51 +250,51 @@ import { GeneralRequest } from "@/types/interfaces/api.interfaces";
 // }
 
 export default class WS extends WebSocket {
-    #listener: Map<string, (value: unknown) => void> = new Map();
-    static #instance: WS;
-    static readonly WS_URI = "ws://localhost:4000/fun-chat/";
+  #listener: Map<string, (value: unknown) => void> = new Map();
+  static #instance: WS;
+  static readonly WS_URI = "ws://localhost:4000/fun-chat/";
 
-    private constructor() {
-        console.log("instance - WS");
+  private constructor() {
+    console.log("instance - WS");
 
-        super(WS.WS_URI);
-        WS.#instance = this;
-        this.addEventListener("open", (event) => {
-            console.log(event);
-            this.listener();
-        });
-    }
+    super(WS.WS_URI);
+    WS.#instance = this;
+    this.addEventListener("open", (event) => {
+      console.log(event);
+      this.listener();
+    });
+  }
 
-    static getInstance() {
-        if (!WS.#instance) {
-            WS.#instance = new WS();
-        }
-        return WS.#instance;
+  static getInstance() {
+    if (!WS.#instance) {
+      WS.#instance = new WS();
     }
+    return WS.#instance;
+  }
 
-    waitForOpen() {
-        if (this.readyState === this.OPEN) {
-            return Promise.resolve();
-        }
-        return new Promise((resolve) => {
-            this.addEventListener("open", (event) => resolve(event), { once: true });
-        });
+  waitForOpen() {
+    if (this.readyState === this.OPEN) {
+      return Promise.resolve();
     }
+    return new Promise((resolve) => {
+      this.addEventListener("open", (event) => resolve(event), { once: true });
+    });
+  }
 
-    async sendRequest<T>(request: GeneralRequest): Promise<T> {
-        return new Promise<T>((resolve) => {
-            this.#listener.set(request.id, resolve as (value: unknown) => void);
-            this.send(JSON.stringify(request));
-        });
-    }
-    listener() {
-        this.addEventListener("message", (event: MessageEvent) => {
-            const data = JSON.parse(event.data);
-            const resolvedFn = this.#listener.get(data.id!);
-            if (data.id && resolvedFn) {
-                resolvedFn(data);
-                this.#listener.delete(data.id);
-            }
-        });
-    }
+  async sendRequest<T>(request: GeneralRequest): Promise<T> {
+    return new Promise<T>((resolve) => {
+      this.#listener.set(request.id, resolve as (value: unknown) => void);
+      this.send(JSON.stringify(request));
+    });
+  }
+  listener() {
+    this.addEventListener("message", (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      const resolvedFn = this.#listener.get(data.id!);
+      if (data.id && resolvedFn) {
+        resolvedFn(data);
+        this.#listener.delete(data.id);
+      }
+    });
+  }
 }

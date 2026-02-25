@@ -4,13 +4,13 @@ import { GeneralNotificationRequest, GeneralNotificationResponse } from "./notif
 import { GeneralUserRequest, GeneralUserResponse } from "./user.interface";
 
 export type GeneralRequest =
-    | GeneralMessageRequest
-    | GeneralNotificationRequest
-    | GeneralUsersStatusRequest
-    | GeneralUserRequest;
+  | GeneralMessageRequest
+  | GeneralNotificationRequest
+  | GeneralUsersStatusRequest
+  | GeneralUserRequest;
 
-    export type GeneralResponse =
-        | GeneralUsersStatusResponse
-        | GeneralUserResponse
-        | GeneralMessageResponse
-        | GeneralNotificationResponse;
+export type GeneralResponse =
+  | GeneralUsersStatusResponse
+  | GeneralUserResponse
+  | GeneralMessageResponse
+  | GeneralNotificationResponse;

@@ -5,61 +5,59 @@ import { User } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
 
 export default class UserService {
-    static #instance: UserService;
-    #user: User | null = null;
-    #socket: WS;
+  static #instance: UserService;
+  #user: User | null = null;
+  #socket: WS;
 
-    #activeUsers = [];
+  #activeUsers = [];
 
-    private constructor() {
-        console.log("instance UserService");
+  private constructor() {
+    console.log("instance UserService");
 
-        this.#socket = WS.getInstance();
-        
-        this.#activeUsers = [];
-        UserService.#instance = this;
+    this.#socket = WS.getInstance();
+
+    this.#activeUsers = [];
+    UserService.#instance = this;
+  }
+
+  static getInstance() {
+    if (!UserService.#instance) {
+      UserService.#instance = new UserService();
     }
 
-    static getInstance() {
-        if (!UserService.#instance) {
-            UserService.#instance = new UserService();
-        }
+    return UserService.#instance;
+  }
 
-        return UserService.#instance;
+  async init() {
+    const users = await this.getActiveUsers();
+
+    if (users.length > 0) {
+      this.#activeUsers = [...users];
     }
+  }
 
-    async init() {
-        const users = await this.getActiveUsers();
+  getUser(): User | null {
+    return this.#user;
+  }
 
-        if (users.length > 0) {
-            this.#activeUsers = [...users]
-        }
-    }
+  async getActiveUsers(): Promise<[]> {
+    console.log("init");
 
-    getUser(): User | null {
+    const response = await this.#socket.sendRequest<AllActiveUsersResponse>({
+      id: uuidv4(),
+      payload: null,
+      type: UserAuth.USER_ACTIVE,
+    });
+    console.log(response);
 
-        return this.#user
-    }
+    const { users } = response.payload;
+    return users;
+  }
 
-    async getActiveUsers() : Promise<[]> {
-        console.log("init");
-
-        const response = await this.#socket.sendRequest<AllActiveUsersResponse>({
-            id: uuidv4(),
-            payload: null,
-            type: UserAuth.USER_ACTIVE,
-        });
-        console.log(response);
-
-       const {users}= response.payload
-        return users
-    }
-
-
-    userDestroy() {
-        this.#user = null
-    }
-    userSetCredentials(userData: User ) {
-        this.#user = { ...userData };
-    }
+  userDestroy() {
+    this.#user = null;
+  }
+  userSetCredentials(userData: User) {
+    this.#user = { ...userData };
+  }
 }

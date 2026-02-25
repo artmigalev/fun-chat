@@ -1,0 +1,13 @@
+.footer{
+  display: grid;
+  grid-template-columns: 1fr 1fr  1fr;
+  padding: 4px;
+}
+
+.git-icon{
+  width: 30px;
+  height: 30px;
+  svg{
+    fill: var(--md-sys-color-primary);
+  }
+}

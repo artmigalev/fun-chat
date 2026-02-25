@@ -8,33 +8,33 @@ import { checkingUserWithLS } from "./utils/user.guard";
 // import Home from "./pages/home/home";
 
 export class App extends Component {
-    #router: Router;
-    // #socket: WS;
-    #user: User | null = null;
-    #userService: UserService;
-    constructor() {
-        super({ tag: "div", className: "app", attrs: { id: "app" } });
-        console.log("instance App");
-        this.#router = Router.init(this);
-        this.#userService = UserService.getInstance();
-    }
+  #router: Router;
+  // #socket: WS;
+  #user: User | null = null;
+  #userService: UserService;
+  constructor() {
+    super({ tag: "div", className: "app", attrs: { id: "app" } });
+    console.log("instance App");
+    this.#router = Router.init(this);
+    this.#userService = UserService.getInstance();
+  }
 
-    async init() {
-        await this.#userService.init();
-        const id = checkingUserWithLS()
-        this.#user = this.#userService.getUser();
-        this.loadPage(id);
-    }
+  async init() {
+    await this.#userService.init();
+    const id = checkingUserWithLS();
+    this.#user = this.#userService.getUser();
+    this.loadPage(id);
+  }
 
-    loadPage(id: string | null) {
-        if (id) {
-            this.#router.navigate(Routes.HOME);
-        } else {
-            this.#router.navigate(Routes.LOGIN);
-        }
+  loadPage(id: string | null) {
+    if (id) {
+      this.#router.navigate(Routes.HOME);
+    } else {
+      this.#router.navigate(Routes.LOGIN);
     }
+  }
 
-    render(page: Component) {
-        this.append(page);
-    }
+  render(page: Component) {
+    this.append(page);
+  }
 }
