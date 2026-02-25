@@ -1,9 +1,12 @@
 import { Component } from "../component";
+import { User } from "@/types/interfaces/user.interface";
+import { UserItemComponent } from "../user-item/user-item";
 
 export class UserList extends Component {
-  // #listItems: Component[];
+  #listItems: Component[];
 
-  constructor(users: string[] = []) {
+
+  constructor(users: User[] = []) {
     super({
       tag: "md-list",
       className: "users-list",
@@ -15,17 +18,29 @@ export class UserList extends Component {
     });
 
     const items = this.generateList(users);
-    this.appendChildren(items);
+    this.#listItems = items;
+    this.appendChildren(this.#listItems);
     // this.#listItems = this.getChild();
   }
 
-  generateList(users: string[]): Component[] {
+  updateUsersList(users: []) {
+    this.#listItems = this.generateList(users);
+    this.removeChildren();
+    this.appendChildren(this.#listItems);
+  }
+  addUserWithUsers(user:Component) {
+    this.#listItems = [...this.#listItems, user]
+    this.removeChildren()
+    this.appendChildren(this.#listItems)
+  }
+
+  generateList(users: User[]): Component[] {
     return users.map((user) => {
       const item = new Component({
         tag: "md-list-item",
         className: "user-item",
       });
-      item.setText(user);
+      item.append(new UserItemComponent(user))
       return item;
     });
   }

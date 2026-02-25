@@ -1,6 +1,9 @@
 import { UserAuth } from "@/app/enum/user-auth.enum";
 import WS from "@/app/ws/ws";
-import { AllActiveUsersResponse } from "@/types/interfaces/auth.unterfaces";
+import {
+  AllActiveUsersResponse,
+  AllInactiveUsersResponse,
+} from "@/types/interfaces/auth.unterfaces";
 import { User } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,14 +12,14 @@ export default class UserService {
   #user: User | null = null;
   #socket: WS;
 
-  #activeUsers = [];
+  #mainUsers: User[] = [];
 
   private constructor() {
     console.log("instance UserService");
 
     this.#socket = WS.getInstance();
 
-    this.#activeUsers = [];
+    this.#mainUsers = [];
     UserService.#instance = this;
   }
 
@@ -29,18 +32,32 @@ export default class UserService {
   }
 
   async init() {
-    const users = await this.getActiveUsers();
+    const { payload } = await this.getAllRegisteredUsers<AllInactiveUsersResponse>();
 
-    if (users.length > 0) {
-      this.#activeUsers = [...users];
+    if (this.#user) {
+      this.#mainUsers = payload.users.filter((user: User) => user.login !== this.#user?.login);
+    } else if (!this.#user) {
+      this.#mainUsers = payload.users;
     }
   }
-
+  getUsers(): User[] {
+    return this.#mainUsers;
+  }
   getUser(): User | null {
     return this.#user;
   }
 
-  async getActiveUsers(): Promise<[]> {
+  async getAllRegisteredUsers<T>(): Promise<T> {
+    const response = await this.#socket.sendRequest<T>({
+      id: uuidv4(),
+      type: UserAuth.USER_INACTIVE,
+      payload: null,
+    });
+
+    return response;
+  }
+
+  async getActiveUsers(): Promise<AllActiveUsersResponse["payload"]["users"]> {
     console.log("init");
 
     const response = await this.#socket.sendRequest<AllActiveUsersResponse>({
