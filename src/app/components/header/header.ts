@@ -6,6 +6,7 @@ import { AuthenticationService } from "@/app/api/services/auth.service";
 import { UserType } from "@/app/enum/user.enum";
 import Router from "@/app/router/router";
 import { Routes } from "@/app/enum/routes.enums";
+import { User } from "@/types/interfaces/user.interface";
 
 export default class Header extends Component {
     #title: Component;
@@ -14,14 +15,22 @@ export default class Header extends Component {
     #authService: AuthenticationService;
     #router: Router;
 
-    constructor() {
-        const profile = new Profile(false);
+    constructor(user: User | null   ) {
+        const  profile = new Profile(user);
+
+
+
+
         const logout = new Component({ className: "btn-logout" });
         logout.setHTML(logoutBtn);
         logout.getNode().firstElementChild?.setAttribute("height", "100%");
         logout.getNode().firstElementChild?.setAttribute("width", "100%");
+
         const container = new Component({ className: "header-container" });
-        container.appendChildren([profile, logout]);
+
+        container.append(profile)
+        container.append(logout);
+
         const title = new Component({ tag: "h2", className: "header-title" });
 
         super({ tag: "header", className: "header" }, title, container);

@@ -1,20 +1,15 @@
 import { Component } from "@components/component";
 // import userAvatarProfile from "@assets/svg/avatar_profile-user.svg";
-import avatarSvg from "@assets/svg/avatar_profile-user.svg?raw";
+import { User } from "@/types/interfaces/user.interface";
 
 export class Profile extends Component {
-    #avatar = new Component({
-        className: "display-avatar",
-    });
+    // #userService :UserService
 
-    constructor(active: boolean) {
+    constructor(user: User | null) {
         super({ className: "profile" });
-        this.#avatar.setHTML(avatarSvg);
-        this.#avatar.getNode().firstElementChild?.setAttribute("height", "100%");
-        this.#avatar.getNode().firstElementChild?.setAttribute("width", "100%");
+        const name = new Component({ tag: "span", className: "user-name" });
+        name.setText(user?.login || 'No Name')
 
-        if (active) this.#avatar.getNode().style.color = "var(--md-sys-color-primary)";
-
-        this.appendChildren([this.#avatar]);
+        this.append(name)
     }
 }

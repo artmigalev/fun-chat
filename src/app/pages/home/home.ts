@@ -1,20 +1,22 @@
+import UserService from "@/app/api/services/user.service";
 import { ChatLayout } from "@/app/layouts/chat/chat";
-import Router from "@/app/router/router";
 import { Component } from "src/app/components/component";
 import Header from "src/app/components/header/header";
 
 export default class HomePage extends Component {
-    // #header: Header;
-    // #chat: ChatLayout;
-    #router:Router
-    constructor(router:Router) {
-        console.log('instanceof home');
-        const header = new Header();
-        const chat = new ChatLayout();
-        super({ className: "home" }, header, chat);
+    #header: Header;
+    #chat: ChatLayout;
+    #userService: UserService
 
-        this.#router =router
-        // this.#header = new Header();
-        // this.#chat = chat;
+    constructor() {
+        console.log('instanceof home');
+        super({ className: "home" });
+        this.#userService = UserService.getInstance()
+        const user = this.#userService.getUser()
+        this.#header = new Header(user)
+        this.#chat = new ChatLayout()
+        this.appendChildren([this.#header,this.#chat])
+
+
     }
 }
