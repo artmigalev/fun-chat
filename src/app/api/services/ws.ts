@@ -287,10 +287,19 @@ export default class WS extends WebSocket {
       this.send(JSON.stringify(request));
     });
   }
+
+  onMessage(callback: (data: MessageEvent) => void) {
+    this.addEventListener("message", (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      callback(data);
+    });
+  }
   listener() {
     this.addEventListener("message", (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       const resolvedFn = this.#listener.get(data.id!);
+      console.log(this.#listener);
+
       if (data.id && resolvedFn) {
         resolvedFn(data);
         this.#listener.delete(data.id);

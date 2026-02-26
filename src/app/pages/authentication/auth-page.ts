@@ -1,16 +1,19 @@
 import { AuthenticationService } from "@/app/api/services/auth.service";
+import UserService from "@/app/api/services/user.service";
 import { Component } from "@/app/components/component";
 import { UserType } from "@/app/enum/user.enum";
 import Router from "@/app/router/router";
 import { loginValidator } from "@/app/utils/validator";
-import { User } from "@/types/interfaces/user.interface";
+import { User, UserAuthResponse, UserAuthResponseErrors } from "@/types/interfaces/user.interface";
 import { TextField } from "@material/web/textfield/internal/text-field";
 
 export class AuthenticationPage extends Component {
+  #authService: AuthenticationService;
+  #userService: UserService;
   #form: Component;
   #fieldTextUserName: Component;
   #fieldTextUserPassword: Component;
-  #authService: AuthenticationService;
+
   #router: Router;
   constructor(router: Router) {
     console.log("instance login-page");
@@ -51,6 +54,7 @@ export class AuthenticationPage extends Component {
 
     super({ tag: "div", className: "auth-page" }, formLogin);
     this.#router = router;
+    this.#userService = UserService.getInstance();
     this.#authService = AuthenticationService.getInstance();
     this.#fieldTextUserName = fieldUserName;
     this.#fieldTextUserPassword = fieldUserPassword;
@@ -77,14 +81,18 @@ export class AuthenticationPage extends Component {
 
     const valid = loginValidator(userCredential);
     if (valid) {
-      const response = await this.#authService.addUser(userCredential);
+      const response = await this.#authService.addUser<UserAuthResponse | UserAuthResponseErrors>(
+        userCredential,
+      );
 
       if (response.type === UserType.ERROR) {
         userNameFieldComponent.error = true;
         userNameFieldComponent.errorText = response.payload.error;
       }
       if (response.type === UserType.USER_LOGIN) {
-        localStorage.setItem("loggedUser", JSON.stringify(response.id));
+        const { user } = response.payload;
+        this.#userService.userSetCredentials(userCredential);
+        this.#userService.toggleStatus(user.isLogined)
         this.#router.navigate("home");
       }
       this.#form.removeListener("submit", this.login);

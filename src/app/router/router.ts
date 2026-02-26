@@ -33,8 +33,6 @@ export default class Router {
     return Router.#instance;
   }
   navigate(route: string, parent?: Component) {
-    console.log("navigate");
-
     const lazyLoadPage = this.#routes[route];
 
     if (lazyLoadPage) {

@@ -1,10 +1,8 @@
 // import WS from "@/app/ws/ws";
 import { UserType } from "@/app/enum/user.enum";
-import WS from "@/app/ws/ws";
+import WS from "@/app/api/services/ws";
 import {
   User,
-  UserAuthResponse,
-  UserAuthResponseErrors,
   UserLogoutResponse,
   UserLogoutResponseError,
 } from "@/types/interfaces/user.interface";
@@ -34,21 +32,17 @@ export class AuthenticationService {
     return AuthenticationService.#instance;
   }
 
-  async addUser(data: User): Promise<UserAuthResponse | UserAuthResponseErrors> {
+  async addUser<T>(data: User): Promise<T> {
     let response;
     if (AuthenticationService.#socket.readyState === AuthenticationService.#socket.OPEN) {
-      response = await AuthenticationService.#socket.sendRequest<
-        UserAuthResponse | UserAuthResponseErrors
-      >({
+      response = await AuthenticationService.#socket.sendRequest<T>({
         id: uuidv4(),
         type: UserType.USER_LOGIN,
         payload: {
           user: data,
         },
       });
-      if (response.type == UserType.USER_LOGIN) {
-        this.#userService.userSetCredentials(response.payload.user);
-      }
+
       return response;
     }
     throw new Error("socked not  connection");

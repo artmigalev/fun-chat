@@ -6,7 +6,7 @@ export class FooterComponent extends Component {
   #year: string = "2026";
 
   constructor() {
-    super({tag:"footer", className: "footer" });
+    super({ tag: "footer", className: "footer" });
     const icon = new Component({ className: "git-icon" });
     icon.setHTML(IconGit);
     icon.getNode().firstElementChild?.setAttribute("height", "100%");
@@ -21,7 +21,6 @@ export class FooterComponent extends Component {
     const author = new Component({ tag: "span", className: "author-name" });
     author.setText(this.#author);
     this.append(author);
-    this.append(new Component({ tag: 'span', className: 'year-created' , text:this.#year}))
-
+    this.append(new Component({ tag: "span", className: "year-created", text: this.#year }));
   }
 }

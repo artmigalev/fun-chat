@@ -5,7 +5,6 @@ import { UserItemComponent } from "../user-item/user-item";
 export class UserList extends Component {
   #listItems: Component[];
 
-
   constructor(users: User[] = []) {
     super({
       tag: "md-list",
@@ -23,15 +22,15 @@ export class UserList extends Component {
     // this.#listItems = this.getChild();
   }
 
-  updateUsersList(users: []) {
+  updateUsersList(users: User[]) {
     this.#listItems = this.generateList(users);
     this.removeChildren();
     this.appendChildren(this.#listItems);
   }
-  addUserWithUsers(user:Component) {
-    this.#listItems = [...this.#listItems, user]
-    this.removeChildren()
-    this.appendChildren(this.#listItems)
+  addUserWithUsers(user: Component) {
+    this.#listItems = [...this.#listItems, user];
+    this.removeChildren();
+    this.appendChildren(this.#listItems);
   }
 
   generateList(users: User[]): Component[] {
@@ -40,7 +39,7 @@ export class UserList extends Component {
         tag: "md-list-item",
         className: "user-item",
       });
-      item.append(new UserItemComponent(user))
+      item.append(new UserItemComponent(user));
       return item;
     });
   }

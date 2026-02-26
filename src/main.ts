@@ -5,7 +5,7 @@ import "@material/web/button/filled-button.js";
 import "@material/web/field/filled-field.js";
 import "@material/web/list/list-item.js";
 import "@material/web/list/list.js";
-import WS from "./app/ws/ws";
+import WS from "./app/api/services/ws";
 import { App } from "./app/app";
 
 const ws = WS.getInstance();
