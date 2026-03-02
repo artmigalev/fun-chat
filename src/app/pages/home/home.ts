@@ -2,7 +2,7 @@ import UserService from "@/app/api/services/user.service";
 import { MainComponent } from "@/app/components/main/main-component";
 import { FooterComponent } from "@/app/components/footer/footer";
 import { Component } from "src/app/components/component";
-import {Header} from "src/app/components/header/header";
+import { Header } from "src/app/components/header/header";
 
 export default class HomePage extends Component {
   #userService: UserService;

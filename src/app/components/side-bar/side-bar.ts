@@ -16,7 +16,6 @@ export default class SideBar extends Component {
   #notify: NotificationService;
   constructor() {
     super({ tag: "aside", className: "side-bar" });
-    
 
     this.#userService = UserService.getInstance();
     const users = this.#userService.getUsers();
@@ -51,7 +50,7 @@ export default class SideBar extends Component {
         break;
       }
     }
-  }
+  };
   render(users: User[]) {
     this.removeChildren();
     this.#userList.removeChildren();

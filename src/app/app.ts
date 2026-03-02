@@ -17,8 +17,6 @@ export class App extends Component {
   }
 
   async init() {
-    await this.#userService.init();
-
     this.loadPage();
   }
 

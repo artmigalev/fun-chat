@@ -5,22 +5,37 @@ import {
   AllInactiveUsersResponse,
   GeneralUsersStatusResponse,
 } from "@/types/interfaces/auth.unterfaces";
-import { User } from "@/types/interfaces/user.interface";
+import {
+  User,
+  UserExternalLoginRequest,
+  UserExternalLogoutRequest,
+} from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
+import { NotificationService } from "./notyfication.service";
+import { UserType } from "@/app/enum/user.enum";
+import { GeneralResponse } from "@/types/interfaces/api.interfaces";
+
+export type USerState = {
+  user: User | null;
+  users: User[];
+};
+type UserSubscriberCallback = (state: USerState) => void;
 
 export default class UserService {
   static #instance: UserService;
   #user: User | null = null;
   #socket: WS;
+  #notify: NotificationService;
+  #users: User[] = [];
 
-  #mainUsers: User[] = [];
+  #subscribers: UserSubscriberCallback[] = [];
 
   private constructor() {
     console.log("instance UserService");
 
     this.#socket = WS.getInstance();
-
-    this.#mainUsers = [];
+    this.#notify = NotificationService.getInstance();
+    this.#notify.subscribe(this.handleNotify);
   }
 
   static getInstance() {
@@ -31,42 +46,102 @@ export default class UserService {
     return UserService.#instance;
   }
 
-  async init() {
-    const users = await this.fetchUsers<User>();
-    console.log(users);
-
-    this.#mainUsers = users.filter((user: User) => user.login !== this.#user?.login);
+  subscribe(callback: UserSubscriberCallback) {
+    this.#subscribers.push(callback);
   }
+  unSubscribe(callback: UserSubscriberCallback) {
+    this.#subscribers = this.#subscribers.filter(
+      (listenerCallback) => listenerCallback !== callback,
+    );
+  }
+
+  private handleNotify = (event: GeneralResponse["type"], data: GeneralResponse) => {
+    const { user } = data.payload as
+      | UserExternalLoginRequest["payload"]
+      | UserExternalLogoutRequest["payload"];
+
+    switch (event) {
+      case UserType.USER_LOGIN: {
+        this.userSetCredentials(user);
+        this.updateUsers(user);
+        break;
+      }
+      case UserType.USER_LOGOUT: {
+        this.userDestroy();
+        break;
+      }
+
+      case UserType.USER_EXTERNAL_LOGIN: {
+        this.updateUsers(user);
+        break;
+      }
+      case UserType.USER_EXTERNAL_LOGOUT: {
+        this.destroyUserByUsers(user.login);
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+    this.notifySubscribers();
+  };
+  private notifySubscribers = () => {
+    const state: USerState = {
+      user: this.#user,
+      users: this.#users,
+    };
+    for (const subscriber of this.#subscribers) {
+      subscriber(state);
+    }
+  };
+  private updateUsers = (user: User) => {
+    this.#users = [...this.#users, user];
+  };
+  private destroyUserByUsers(login: User["login"]) {
+    this.#users = this.#users.filter((user) => user.login !== login);
+  }
+  // async init() {
+  //   const users = await this.fetchUsers<User>();
+  //   console.log(users);
+
+  //   this.#users = users.filter((user: User) => user.login !== this.#user?.login);
+  // }
   getUsers(): User[] {
     const mainUser = this.#user;
-    return this.#mainUsers.filter((user) => user.login !== mainUser?.login);
+    const usersPromise = this.fetchUsers<AllActiveUsersResponse & AllInactiveUsersResponse>();
+
+    usersPromise.then((users) => {
+      this.#users = users.filter((user: User) => user.login !== mainUser?.login);
+    });
+    return this.#users;
   }
 
   getUser(): User | null {
     return this.#user;
   }
-  getUserByUsers(login: User["login"]) {
-    return this.#mainUsers.find((user) => user.login === login);
-  }
+  // getUserByUsers(login: User["login"]) {
+  //   return this.#users.find((user) => user.login === login);
+  // }
 
-  updateUsers(user: User) {
-    const { login } = user;
-    if (this.getUserByUsers(login)) {
-      const updatedUsers = this.#mainUsers.map((mainUser) => {
-        if (mainUser.login === user.login) {
-          return {
-            ...mainUser,
-            isLogined: user.isLogined,
-          };
+  // updateUsers(user: User) {
+  //   const { login } = user;
+  //   if (this.getUserByUsers(login)) {
+  //     const updatedUsers = this.#users.map((mainUser) => {
+  //       if (mainUser.login === user.login) {
+  //         return {
+  //           ...mainUser,
+  //           isLogined: user.isLogined,
+  //         };
 
-        }
-        return mainUser
-      });
-      this.#mainUsers = [...updatedUsers];
-    } else {
-      this.#mainUsers.push(user);
-    }
-  }
+  //       }
+  //       return mainUser
+  //     });
+  //     this.#users = [...updatedUsers];
+  //   } else {
+  //     this.#users.push(user);
+  //   }
+  // }
   async fetchUsers<T>(): Promise<T[]> {
     const allUsers = await Promise.all([
       ...(await this.getAllInactiveUsers<AllInactiveUsersResponse["payload"]["users"]>()),

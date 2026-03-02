@@ -1,5 +1,4 @@
-
-.list-msg{
+.list-msg {
   display: flex;
   flex-direction: column;
   gap: 5px;

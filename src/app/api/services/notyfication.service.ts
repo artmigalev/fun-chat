@@ -1,6 +1,7 @@
+import { GeneralResponse } from "@/types/interfaces/api.interfaces";
 import WS from "./ws";
 
-type NotifyCallback = (event: MessageEvent["type"], data: MessageEvent["data"]) => void;
+export type NotifyCallback = (event: GeneralResponse["type"], data: MessageEvent["data"]) => void;
 
 export class NotificationService {
   #listeners: NotifyCallback[] = [];
@@ -28,7 +29,7 @@ export class NotificationService {
   unSubscribe(callback: NotifyCallback) {
     this.#listeners = this.#listeners.filter((listenerCallback) => listenerCallback !== callback);
   }
-  notifyListener(event: MessageEvent["type"], data: MessageEvent["data"]) {
+  notifyListener(event: GeneralResponse["type"], data: MessageEvent["data"]) {
     for (const callback of this.#listeners) {
       callback(event, data);
     }

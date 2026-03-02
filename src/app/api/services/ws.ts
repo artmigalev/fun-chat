@@ -1,7 +1,7 @@
 // import App from "@/app/app";
 // import { IUser } from "@/interface";
 
-import { GeneralRequest } from "@/types/interfaces/api.interfaces";
+import { GeneralRequest, GeneralResponse } from "@/types/interfaces/api.interfaces";
 
 // export default class WS extends WebSocket {
 //     constructor(string_: string) {
@@ -288,7 +288,7 @@ export default class WS extends WebSocket {
     });
   }
 
-  onMessage(callback: (data: MessageEvent) => void) {
+  onMessage(callback: (data: GeneralResponse) => void) {
     this.addEventListener("message", (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       callback(data);

@@ -6,7 +6,7 @@ import UserService from "@/app/api/services/user.service";
 
 export class ControlPanel extends Component {
   #messageService: MessageService;
-  #userService:UserService
+  #userService: UserService;
   #sendBtn: Component;
   #textInput: Component;
 
@@ -44,7 +44,7 @@ export class ControlPanel extends Component {
     // const {login}= this.#userService.getUser() as User
     // console.log(this.#textInput.getProps().value);
     const textAria = this.#textInput.getNode() as TextField;
-    this.#messageService.sendingMessageByUser(textAria.value, 'user');
-    this.removeListener("click", this.handleSubmit);  
+    this.#messageService.sendingMessageByUser(textAria.value, "user");
+    this.removeListener("click", this.handleSubmit);
   };
 }

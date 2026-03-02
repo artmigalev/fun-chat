@@ -28,7 +28,7 @@ export class MessageService {
 
   private init() {
     const user = this.#userService.getUser();
-    if(user) this.getHistoryByUser();
+    if (user) this.getHistoryByUser();
   }
 
   static getInstance() {
@@ -61,7 +61,7 @@ export class MessageService {
     if (response.type === MsgType.ERROR) {
       // throw new Error(response.payload.error);
     }
-    if(response.type === MsgType.MSG_FROM_USER) {
+    if (response.type === MsgType.MSG_FROM_USER) {
       this.#historyMessages = response.payload.messages;
     }
   }

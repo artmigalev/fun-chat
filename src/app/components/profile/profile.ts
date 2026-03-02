@@ -7,9 +7,18 @@ export class Profile extends Component {
 
   constructor(user: User | null) {
     super({ className: "profile" });
-    const name = new Component({ tag: "span", className: "user-name" });
-    name.setText(user?.login || "No Name");
+    this.render(user);
+  }
 
+  render(user: User | null) {
+    this.removeChildren();
+    const name = new Component({ tag: "span", className: "user-name" });
+
+    if (user) {
+      name.setText(user.login);
+    } else {
+      name.setText("No Name");
+    }
     this.append(name);
   }
 }

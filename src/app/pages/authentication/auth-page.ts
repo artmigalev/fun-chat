@@ -90,9 +90,6 @@ export class AuthenticationPage extends Component {
         userNameFieldComponent.errorText = response.payload.error;
       }
       if (response.type === UserType.USER_LOGIN) {
-        const { user } = response.payload;
-        this.#userService.userSetCredentials(userCredential);
-        this.#userService.toggleStatus(user.isLogined)
         this.#router.navigate("home");
       }
       this.#form.removeListener("submit", this.login);

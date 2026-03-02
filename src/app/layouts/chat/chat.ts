@@ -20,14 +20,10 @@ export class ChatComponent extends Component {
     this.#viewMessages = new ViewMessages([]);
     this.#controlPanel = new ControlPanel();
 
-
     this.appendChildren([this.#viewMessages, this.#controlPanel]);
 
     // this.#notify.subscribe(this.handleNotify);
-
   }
-
-
 
   // private handleNotify = (event: MessageEvent['type'], data: MessageEvent['data']) => {
 

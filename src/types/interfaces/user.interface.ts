@@ -92,4 +92,5 @@ export type GeneralUserResponse =
   | UserAuthResponseErrors
   | UserLogoutResponse
   | UserLogoutResponseError
+  | UserExternalLoginRequest
   | UserExternalLogoutRequest;
