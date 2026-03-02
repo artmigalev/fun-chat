@@ -1,13 +1,13 @@
 import UserService from "@/app/api/services/user.service";
+import { MainComponent } from "@/app/components/main/main-component";
 import { FooterComponent } from "@/app/components/footer/footer";
-import { ChatLayout } from "@/app/layouts/chat/chat";
 import { Component } from "src/app/components/component";
 import {Header} from "src/app/components/header/header";
 
 export default class HomePage extends Component {
   #userService: UserService;
   #header: Header;
-  #chat: ChatLayout;
+  #main: MainComponent;
   #footer: FooterComponent;
 
   constructor() {
@@ -16,8 +16,8 @@ export default class HomePage extends Component {
     this.#userService = UserService.getInstance();
     const user = this.#userService.getUser();
     this.#header = new Header(user);
-    this.#chat = new ChatLayout();
+    this.#main = new MainComponent();
     this.#footer = new FooterComponent();
-    this.appendChildren([this.#header, this.#chat, this.#footer]);
+    this.appendChildren([this.#header, this.#main, this.#footer]);
   }
 }

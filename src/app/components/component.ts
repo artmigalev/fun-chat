@@ -7,7 +7,7 @@ interface Options {
 }
 
 export class Component {
-  #node: HTMLElement;
+#node: HTMLElement;
   #childNodes: Component[] = [];
 
   constructor(options: Options, ...childNodes: Component[]) {

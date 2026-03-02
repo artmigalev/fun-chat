@@ -20,6 +20,7 @@
 }
 .panel {
   border-radius: var(--md-sys-shape-corner-large);
+  height: 50px;
 }
 md-filled-button {
   max-width: 100px;

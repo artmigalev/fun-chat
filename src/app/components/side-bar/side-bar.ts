@@ -16,6 +16,8 @@ export default class SideBar extends Component {
   #notify: NotificationService;
   constructor() {
     super({ tag: "aside", className: "side-bar" });
+    
+
     this.#userService = UserService.getInstance();
     const users = this.#userService.getUsers();
     this.#notify = NotificationService.getInstance();

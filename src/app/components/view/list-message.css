@@ -1,7 +1,8 @@
-.chat {
-  
+
+.list-msg{
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 5px;
   height: 100%;
+  overflow-y: auto;
 }

@@ -2,7 +2,7 @@ import { IMassage } from "@/types/interfaces";
 import { Component } from "../component";
 import Message from "@components/message/message";
 
-export class View extends Component {
+export class ViewMessages extends Component {
   // #item: Component;
   constructor(messages: [] | IMassage[]) {
     const item = new Component({

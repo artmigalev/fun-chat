@@ -29,8 +29,8 @@ export class NotificationService {
     this.#listeners = this.#listeners.filter((listenerCallback) => listenerCallback !== callback);
   }
   notifyListener(event: MessageEvent["type"], data: MessageEvent["data"]) {
-    for (const clbk of this.#listeners) {
-      clbk(event, data);
+    for (const callback of this.#listeners) {
+      callback(event, data);
     }
   }
 }

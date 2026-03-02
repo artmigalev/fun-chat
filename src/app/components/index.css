@@ -1,9 +1,9 @@
 @import "./profile/profile";
-@import "./chat-display/chat-display.css";
+@import "./main/main-component.css";
 @import "./panel/control-panel.css";
 @import "./side-bar/side-bar.css";
 @import "./users-list/user-list.css";
 @import "./message/message.css";
-@import "./view/view.css";
+@import "./view/list-message.css";
 @import "./footer/footer";
 @import "./user-item/user-item";

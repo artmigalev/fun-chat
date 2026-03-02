@@ -37,10 +37,10 @@ export  class Header extends Component {
     const title = new Component({ tag: "h2", className: "header-title" });
 
     super({ tag: "header", className: "header" }, title, container);
+    this.#userService = UserService.getInstance();
+    this.#authService = AuthenticationService.getInstance();
     this.#notify = NotificationService.getInstance();
     this.#notify.subscribe(this.handleNotify);
-    this.#authService = AuthenticationService.getInstance();
-    this.#userService = UserService.getInstance();
     this.#router = Router.getInstance();
     this.#title = title;
     this.#btnLogout = logout;
