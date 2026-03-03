@@ -16,7 +16,6 @@ export default class Router {
   #history: History;
   baseUri = "fun-chat";
   private constructor(app: App) {
-    console.log("instance router");
     Router.#instance = this;
 
     this.#app = app;

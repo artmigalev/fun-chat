@@ -1,10 +1,10 @@
 import { AuthenticationService } from "@/app/api/services/auth.service";
-import UserService from "@/app/api/services/user.service";
+import UserService, { UserState } from "@/app/api/services/user.service";
 import { Component } from "@/app/components/component";
 import { UserType } from "@/app/enum/user.enum";
 import Router from "@/app/router/router";
 import { loginValidator } from "@/app/utils/validator";
-import { User, UserAuthResponse, UserAuthResponseErrors } from "@/types/interfaces/user.interface";
+import { UserAuthResponse, UserAuthResponseErrors } from "@/types/interfaces/user.interface";
 import { TextField } from "@material/web/textfield/internal/text-field";
 
 export class AuthenticationPage extends Component {
@@ -16,8 +16,6 @@ export class AuthenticationPage extends Component {
 
   #router: Router;
   constructor(router: Router) {
-    console.log("instance login-page");
-
     const fieldUserName = new Component({
       tag: "md-filled-text-field",
       className: "username",
@@ -55,6 +53,7 @@ export class AuthenticationPage extends Component {
     super({ tag: "div", className: "auth-page" }, formLogin);
     this.#router = router;
     this.#userService = UserService.getInstance();
+    this.#userService.subscribe(this.handleUserLogin);
     this.#authService = AuthenticationService.getInstance();
     this.#fieldTextUserName = fieldUserName;
     this.#fieldTextUserPassword = fieldUserPassword;
@@ -67,17 +66,35 @@ export class AuthenticationPage extends Component {
   btnListener() {
     this.#form.addListener("submit", this.login);
   }
+  handleUserLogin = (state: UserState) => {
+    const { user } = state;
+
+    if (user && user.isLogined) {
+      const user = this.getUserCredential();
+      this.#userService.userSetCredentials(user);
+      this.#router.navigate("home");
+    }
+  };
+
+  getUserCredential() {
+    const name = this.#fieldTextUserName.getNode() as TextField;
+    const password = this.#fieldTextUserPassword.getNode() as TextField;
+    return {
+      login: name.value || "",
+      password: password.value || "",
+    };
+  }
+
+  showError(status: boolean, text: string) {
+    const user = this.#fieldTextUserName.getNode() as TextField;
+    user.error = status;
+    user.errorText = text;
+  }
 
   login = async (event: Event) => {
     event.preventDefault();
 
-    const userNameFieldComponent = this.#fieldTextUserName.getNode() as TextField;
-    const userPasswordFieldComponent = this.#fieldTextUserPassword.getNode() as TextField;
-
-    const userCredential: User = {
-      login: userNameFieldComponent.value || "",
-      password: userPasswordFieldComponent.value || "",
-    };
+    const userCredential = this.getUserCredential();
 
     const valid = loginValidator(userCredential);
     if (valid) {
@@ -86,12 +103,10 @@ export class AuthenticationPage extends Component {
       );
 
       if (response.type === UserType.ERROR) {
-        userNameFieldComponent.error = true;
-        userNameFieldComponent.errorText = response.payload.error;
+        this.showError(true, response.payload.error);
+        return;
       }
-      if (response.type === UserType.USER_LOGIN) {
-        this.#router.navigate("home");
-      }
+
       this.#form.removeListener("submit", this.login);
       // console.log(response);
     }

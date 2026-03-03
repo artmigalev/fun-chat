@@ -1,11 +1,10 @@
 import { Component } from "src/app/components/component";
 import { Profile } from "../profile/profile";
 import logoutBtn from "@assets/svg/logout-icon.svg?raw";
-import UserService, { USerState } from "@/app/api/services/user.service";
+import UserService, { UserState } from "@/app/api/services/user.service";
 import { AuthenticationService } from "@/app/api/services/auth.service";
 import Router from "@/app/router/router";
 
-import { NotificationService } from "@/app/api/services/notyfication.service";
 import { Routes } from "@/app/enum/routes.enums";
 
 export class Header extends Component {
@@ -14,8 +13,9 @@ export class Header extends Component {
   #userService: UserService;
   #authService: AuthenticationService;
   #router: Router;
-  #notify: NotificationService;
   #profile: Profile;
+
+
   constructor() {
     const logout = new Component({ className: "btn-logout" });
     logout.setHTML(logoutBtn);
@@ -42,13 +42,15 @@ export class Header extends Component {
     this.#title.setText("Fun Chat");
   }
 
-  private handleUserUpdate = (state: USerState) => {
+  private handleUserUpdate = (state: UserState) => {
     this.#profile.render(state.user);
   };
 
   logout = async () => {
     const user = this.#userService.getUser();
     if (user) {
+      console.log(user);
+      
       await this.#authService.logout(user);
       this.#router.navigate(Routes.LOGIN);
     }

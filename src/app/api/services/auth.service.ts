@@ -7,16 +7,12 @@ import {
   UserLogoutResponseError,
 } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
-import UserService from "./user.service";
 
 export class AuthenticationService {
   static #socket: WS;
   static #instance: AuthenticationService;
-  #userService: UserService;
 
   private constructor() {
-    this.#userService = UserService.getInstance();
-    console.log("instance - AuthenticationService");
     if (AuthenticationService.#instance) {
       return AuthenticationService.#instance;
     }

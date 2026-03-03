@@ -255,12 +255,9 @@ export default class WS extends WebSocket {
   static readonly WS_URI = "ws://localhost:4000/fun-chat/";
 
   private constructor() {
-    console.log("instance - WS");
-
     super(WS.WS_URI);
     WS.#instance = this;
-    this.addEventListener("open", (event) => {
-      console.log(event);
+    this.addEventListener("open", () => {
       this.listener();
     });
   }
@@ -298,7 +295,6 @@ export default class WS extends WebSocket {
     this.addEventListener("message", (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       const resolvedFn = this.#listener.get(data.id!);
-      console.log(this.#listener);
 
       if (data.id && resolvedFn) {
         resolvedFn(data);

@@ -15,11 +15,11 @@ import { NotificationService } from "./notyfication.service";
 import { UserType } from "@/app/enum/user.enum";
 import { GeneralResponse } from "@/types/interfaces/api.interfaces";
 
-export type USerState = {
+export type UserState = {
   user: User | null;
   users: User[];
 };
-type UserSubscriberCallback = (state: USerState) => void;
+type UserSubscriberCallback = (state: UserState) => void;
 
 export default class UserService {
   static #instance: UserService;
@@ -31,7 +31,6 @@ export default class UserService {
   #subscribers: UserSubscriberCallback[] = [];
 
   private constructor() {
-    console.log("instance UserService");
 
     this.#socket = WS.getInstance();
     this.#notify = NotificationService.getInstance();
@@ -63,6 +62,7 @@ export default class UserService {
     switch (event) {
       case UserType.USER_LOGIN: {
         this.userSetCredentials(user);
+        this.toggleStatus(user.isLogined);
         this.updateUsers(user);
         break;
       }
@@ -87,7 +87,7 @@ export default class UserService {
     this.notifySubscribers();
   };
   private notifySubscribers = () => {
-    const state: USerState = {
+    const state: UserState = {
       user: this.#user,
       users: this.#users,
     };
@@ -101,47 +101,20 @@ export default class UserService {
   private destroyUserByUsers(login: User["login"]) {
     this.#users = this.#users.filter((user) => user.login !== login);
   }
-  // async init() {
-  //   const users = await this.fetchUsers<User>();
-  //   console.log(users);
+  async init() {
+    const users = await this.fetchUsers<User>();
 
-  //   this.#users = users.filter((user: User) => user.login !== this.#user?.login);
-  // }
+    this.#users = users.filter((user: User) => user.login !== this.#user?.login);
+  }
   getUsers(): User[] {
-    const mainUser = this.#user;
-    const usersPromise = this.fetchUsers<AllActiveUsersResponse & AllInactiveUsersResponse>();
 
-    usersPromise.then((users) => {
-      this.#users = users.filter((user: User) => user.login !== mainUser?.login);
-    });
     return this.#users;
   }
 
   getUser(): User | null {
     return this.#user;
   }
-  // getUserByUsers(login: User["login"]) {
-  //   return this.#users.find((user) => user.login === login);
-  // }
 
-  // updateUsers(user: User) {
-  //   const { login } = user;
-  //   if (this.getUserByUsers(login)) {
-  //     const updatedUsers = this.#users.map((mainUser) => {
-  //       if (mainUser.login === user.login) {
-  //         return {
-  //           ...mainUser,
-  //           isLogined: user.isLogined,
-  //         };
-
-  //       }
-  //       return mainUser
-  //     });
-  //     this.#users = [...updatedUsers];
-  //   } else {
-  //     this.#users.push(user);
-  //   }
-  // }
   async fetchUsers<T>(): Promise<T[]> {
     const allUsers = await Promise.all([
       ...(await this.getAllInactiveUsers<AllInactiveUsersResponse["payload"]["users"]>()),
@@ -160,7 +133,6 @@ export default class UserService {
   }
 
   async getActiveUsers<T>(): Promise<T | []> {
-    console.log("init");
 
     const response = await this.#socket.sendRequest<GeneralUsersStatusResponse>({
       id: uuidv4(),
@@ -176,7 +148,8 @@ export default class UserService {
     this.#user = null;
   }
   userSetCredentials(userData: User) {
-    this.#user = { ...userData };
+
+    this.#user = {...this.#user, ...userData };
   }
   toggleStatus(status: boolean) {
     if (this.#user) {
