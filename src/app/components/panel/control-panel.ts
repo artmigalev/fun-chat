@@ -36,15 +36,18 @@ export class ControlPanel extends Component {
     this.#userService = UserService.getInstance();
     this.#sendBtn = button;
     this.#textInput = textContainer;
-    this.addListener("click", this.handleSubmit);
+    this.addListener("submit", this.handleSubmit);
   }
 
-  handleSubmit = (event: Event) => {
+  handleSubmit = async (event: Event) => {
+    event.stopPropagation();
     event.preventDefault();
     // const {login}= this.#userService.getUser() as User
     // console.log(this.#textInput.getProps().value);
     const textAria = this.#textInput.getNode() as TextField;
-    this.#messageService.sendingMessageByUser(textAria.value, "user");
+    const user = this.#userService.getUser();
+    if (user === null) return;
+    await this.#messageService.sendingMessageByUser(textAria.value, user?.login);
     this.removeListener("click", this.handleSubmit);
   };
 }

@@ -15,7 +15,6 @@ export class Header extends Component {
   #router: Router;
   #profile: Profile;
 
-
   constructor() {
     const logout = new Component({ className: "btn-logout" });
     logout.setHTML(logoutBtn);
@@ -50,7 +49,7 @@ export class Header extends Component {
     const user = this.#userService.getUser();
     if (user) {
       console.log(user);
-      
+
       await this.#authService.logout(user);
       this.#router.navigate(Routes.LOGIN);
     }

@@ -3,26 +3,40 @@ import {
   Message,
   MessageHistoryFromUserResponse,
   MessageHistoryFromUserResponseError,
+  MessageSendUserResponse,
 } from "@/types/interfaces/message.interface";
 import { User } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
 import WS from "./ws";
-import { GeneralRequest } from "@/types/interfaces/api.interfaces";
+import { GeneralRequest, GeneralResponse } from "@/types/interfaces/api.interfaces";
 import UserService from "./user.service";
+import { NotificationService } from "./notyfication.service";
+
+export type MessageState = {
+  message: Message | null;
+  history: Message[];
+};
+
+type MessageClbk = (state: MessageState) => void;
 
 export class MessageService {
   static #instance: MessageService;
   #socket: WS;
-  // #notificationService: NotificationService;
   #userService: UserService;
+  #notify: NotificationService;
 
-  #historyMessages: [] = [];
-  // #errorMessages: [] = [];
+  #state: MessageState = {
+    message: null,
+    history: [],
+  };
+
+  #subscribers: MessageClbk[] = [];
 
   private constructor() {
-    this.#socket = WS.getInstance();
-    // this.#notificationService = NotificationService.getInstance()
     this.#userService = UserService.getInstance();
+    this.#socket = WS.getInstance();
+    this.#notify = NotificationService.getInstance();
+    this.#notify.subscribe(this.handleNotify);
     this.init();
   }
 
@@ -37,8 +51,61 @@ export class MessageService {
     }
     return MessageService.#instance;
   }
+  subscribe(callback: MessageClbk) {
+    this.#subscribers.push(callback);
+  }
+  unsubscribe(callback: MessageClbk) {
+    this.#subscribers = this.#subscribers.filter(
+      (listenerCallback) => listenerCallback !== callback,
+    );
+  }
+
+  notifySubscribers() {
+    const state = this.#state;
+    for (const subscriber of this.#subscribers) {
+      subscriber(state);
+    }
+  }
+
+  private handleNotify = (event: GeneralResponse["type"], data: GeneralResponse["payload"]) => {
+    switch (event) {
+      case MsgType.MSG_SEND: {
+        const { message } = data as MessageSendUserResponse["payload"];
+        this.addToHistory(message);
+
+        break;
+      }
+
+      // case "MSG_EDIT":
+      // case "MSG_DELETE":
+      // case "MSG_COUNT_NOT_READED_FROM_USER":
+      case MsgType.MSG_FROM_USER: {
+        const { messages } = data as MessageHistoryFromUserResponse["payload"];
+
+        this.updateHistory(messages);
+
+        break;
+      }
+      // case "MSG_READ":
+      default: {
+        break;
+      }
+    }
+
+    this.notifySubscribers();
+  };
+
+  // changedStatusMessage
+  addToHistory(message: Message) {
+    this.#state.history.push(message);
+  }
+
+  updateHistory(history: Message[]) {
+    this.#state.history = [...history];
+  }
+
   getHistory() {
-    return this.#historyMessages;
+    return this.#state.history;
   }
   private async getHistoryByUser() {
     const user = this.#userService.getUser();
@@ -62,7 +129,7 @@ export class MessageService {
       // throw new Error(response.payload.error);
     }
     if (response.type === MsgType.MSG_FROM_USER) {
-      this.#historyMessages = response.payload.messages;
+      this.#state.history = response.payload.messages;
     }
   }
 

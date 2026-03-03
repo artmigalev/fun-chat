@@ -1,24 +1,30 @@
-import { IMassage } from "@/types/interfaces";
 import { Component } from "../component";
 import Message from "@components/message/message";
+import { Message as IMassage } from "@/types/interfaces/message.interface";
 
 export class ViewMessages extends Component {
-  // #item: Component;
+  #item: Component;
   constructor(messages: [] | IMassage[]) {
-    const item = new Component({
+    super({
+      tag: "md-list",
+      className: "list-msg",
+    });
+    this.#item = new Component({
       tag: "md-list-item",
       className: "list-msg-item",
     });
-    super(
-      {
-        tag: "md-list",
-        className: "list-msg",
-      },
-      item,
-    );
-    // this.#item = item;
-    const items = this.renderItemsWithMsgs(messages, item);
-    this.appendChildren(items);
+
+    if (messages.length > 0) {
+      const items = this.renderItemsWithMsgs(messages, this.#item);
+      this.appendChildren(items);
+    } else {
+      const span = new Component({
+        tag: "span",
+        className: "empty-msg",
+        text: "Нет сообщений",
+      });
+      this.append(span);
+    }
   }
 
   renderItemsWithMsgs(msgs: IMassage[], item: Component): Component[] {
@@ -28,5 +34,14 @@ export class ViewMessages extends Component {
       item.append(new Message(message));
       return item;
     });
+  }
+
+  renderHistory(history: IMassage[]) {
+    if (history.length > 0) {
+      this.removeChildren();
+      const items = this.renderItemsWithMsgs(history, this.#item);
+      this.appendChildren(items);
+    }
+    return;
   }
 }
