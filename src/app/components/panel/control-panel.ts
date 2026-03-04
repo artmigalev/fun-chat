@@ -42,12 +42,13 @@ export class ControlPanel extends Component {
   handleSubmit = async (event: Event) => {
     event.stopPropagation();
     event.preventDefault();
-    // const {login}= this.#userService.getUser() as User
-    // console.log(this.#textInput.getProps().value);
-    const textAria = this.#textInput.getNode() as TextField;
-    const user = this.#userService.getUser();
-    if (user === null) return;
-    await this.#messageService.sendingMessageByUser(textAria.value, user?.login);
+    const activeRoom = this.#userService.getActiveRoom();
+    if (activeRoom) {
+      const textAria = this.#textInput.getNode() as TextField;
+
+      this.#messageService.sendingMessageByUser(textAria.value,activeRoom);
+    }
+
     this.removeListener("click", this.handleSubmit);
   };
 }

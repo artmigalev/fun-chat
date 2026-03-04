@@ -288,6 +288,7 @@ export default class WS extends WebSocket {
   onMessage(callback: (data: GeneralResponse) => void) {
     this.addEventListener("message", (event: MessageEvent) => {
       const data = JSON.parse(event.data);
+
       callback(data);
     });
   }

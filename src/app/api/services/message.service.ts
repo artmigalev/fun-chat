@@ -13,7 +13,7 @@ import UserService from "./user.service";
 import { NotificationService } from "./notyfication.service";
 
 export type MessageState = {
-  message: Message | null;
+  // message: Message | null;
   history: Message[];
 };
 
@@ -26,7 +26,7 @@ export class MessageService {
   #notify: NotificationService;
 
   #state: MessageState = {
-    message: null,
+
     history: [],
   };
 
@@ -41,8 +41,9 @@ export class MessageService {
   }
 
   private init() {
-    const user = this.#userService.getUser();
-    if (user) this.getHistoryByUser();
+    const room = this.#userService.getActiveRoom();
+
+    if (room) this.getHistoryByUser();
   }
 
   static getInstance() {
@@ -52,6 +53,8 @@ export class MessageService {
     return MessageService.#instance;
   }
   subscribe(callback: MessageClbk) {
+
+
     this.#subscribers.push(callback);
   }
   unsubscribe(callback: MessageClbk) {
@@ -67,10 +70,12 @@ export class MessageService {
     }
   }
 
-  private handleNotify = (event: GeneralResponse["type"], data: GeneralResponse["payload"]) => {
-    switch (event) {
+  private handleNotify = (type: GeneralResponse["type"], payload: GeneralResponse['payload']) => {
+    switch (type) {
       case MsgType.MSG_SEND: {
-        const { message } = data as MessageSendUserResponse["payload"];
+        console.log(payload);
+
+        const { message } = payload as MessageSendUserResponse['payload'];
         this.addToHistory(message);
 
         break;
@@ -80,9 +85,13 @@ export class MessageService {
       // case "MSG_DELETE":
       // case "MSG_COUNT_NOT_READED_FROM_USER":
       case MsgType.MSG_FROM_USER: {
-        const { messages } = data as MessageHistoryFromUserResponse["payload"];
+        if ('messages' in payload) {
 
-        this.updateHistory(messages);
+          const { messages } = payload as MessageHistoryFromUserResponse["payload"];
+          this.updateHistory(messages);
+        }
+       
+
 
         break;
       }
@@ -101,35 +110,28 @@ export class MessageService {
   }
 
   updateHistory(history: Message[]) {
-    this.#state.history = [...history];
+    this.#state.history = history;
   }
 
   getHistory() {
     return this.#state.history;
   }
   private async getHistoryByUser() {
-    const user = this.#userService.getUser();
-
-    if (!user) throw new Error("User not found");
-
-    const request = {
-      id: uuidv4(),
-      type: MsgType.MSG_FROM_USER,
-      payload: {
-        user: {
-          login: user?.login,
+    const room = this.#userService.getActiveRoom();
+    if (room) {
+      const request = {
+        id: uuidv4(),
+        type: MsgType.MSG_FROM_USER,
+        payload: {
+          user: {
+            login: room,
+          },
         },
-      },
-    };
+      };
 
-    const response = await this.#socket.sendRequest<
-      MessageHistoryFromUserResponse | MessageHistoryFromUserResponseError
-    >(request);
-    if (response.type === MsgType.ERROR) {
-      // throw new Error(response.payload.error);
-    }
-    if (response.type === MsgType.MSG_FROM_USER) {
-      this.#state.history = response.payload.messages;
+      await this.#socket.sendRequest<
+        MessageHistoryFromUserResponse | MessageHistoryFromUserResponseError
+      >(request);
     }
   }
 

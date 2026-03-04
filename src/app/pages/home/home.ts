@@ -11,7 +11,6 @@ export default class HomePage extends Component {
   #footer: FooterComponent;
 
   constructor() {
-    console.log("instanceof home");
     super({ className: "home" });
     this.#userService = UserService.getInstance();
     const user = this.#userService.getUser();

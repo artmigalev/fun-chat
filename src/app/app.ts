@@ -20,6 +20,7 @@ export class App extends Component {
   loadPage() {
 
     const user = this.#userService.getUser()
+    
     if (user?.isLogined) {
       this.#router.navigate(Routes.HOME);
     } else {

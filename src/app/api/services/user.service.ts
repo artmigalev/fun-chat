@@ -7,8 +7,6 @@ import {
 } from "@/types/interfaces/auth.unterfaces";
 import {
   User,
-  UserExternalLoginRequest,
-  UserExternalLogoutRequest,
 } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
 import { NotificationService } from "./notyfication.service";
@@ -17,7 +15,7 @@ import { GeneralResponse } from "@/types/interfaces/api.interfaces";
 import { AuthenticationService } from "./auth.service";
 
 export type UserState = {
-  roomByUser: User['login'] | null;
+  defaultRoom: User["login"] | null;
   user: User | null;
   users: User[];
 };
@@ -28,7 +26,7 @@ export default class UserService {
   #authService: AuthenticationService = AuthenticationService.getInstance();
   #socket: WS;
   #notify: NotificationService;
-  #state: UserState = { roomByUser: null, user: null, users: [] };
+  #state: UserState = { defaultRoom: null, user: null, users: [] };
 
   #subscribers: UserSubscriberCallback[] = [];
 
@@ -55,16 +53,17 @@ export default class UserService {
     );
   }
 
-  private handleNotify = (event: GeneralResponse["type"], data: GeneralResponse) => {
-    const { user } = data.payload as
-      | UserExternalLoginRequest["payload"]
-      | UserExternalLogoutRequest["payload"];
+  private handleNotify = (type: GeneralResponse["type"], payload: GeneralResponse["payload"]) => {
+    if ("user" in payload) {}
 
-    switch (event) {
+    switch (type) {
       case UserType.USER_LOGIN: {
-        this.userSetCredentials(user);
-        this.toggleStatus(user.isLogined);
-        this.updateUsers(user);
+        if ("user" in payload) {
+          const { user } = payload;
+          this.userSetCredentials(user);
+          this.toggleStatus(user.isLogined);
+          this.updateUsers(user);
+        }
         break;
       }
       case UserType.USER_LOGOUT: {
@@ -73,11 +72,17 @@ export default class UserService {
       }
 
       case UserType.USER_EXTERNAL_LOGIN: {
-        this.updateUsers(user);
+        if ("user" in payload) {
+          const { user } = payload;
+          this.updateUsers(user);
+        }
         break;
       }
       case UserType.USER_EXTERNAL_LOGOUT: {
-        this.destroyUserByUsers(user.login);
+        if ("user" in payload) {
+          const { user } = payload;
+          this.destroyUserByUsers(user.login);
+        }
         break;
       }
 
@@ -91,7 +96,7 @@ export default class UserService {
     const state: UserState = {
       user: this.#state.user,
       users: this.#state.users,
-      roomByUser: this.#state.user?.login || null,
+      defaultRoom: this.#state.user?.login || null,
     };
     for (const subscriber of this.#subscribers) {
       subscriber(state);
@@ -103,11 +108,22 @@ export default class UserService {
   private destroyUserByUsers(login: User["login"]) {
     this.#state.users = this.#state.users.filter((user) => user.login !== login);
   }
+  activateRoom(login?: string) {
+    // const {users, defaultRoom} = this.#state
+    if (login) {
+      this.#state.defaultRoom = login;
+    }
+    if (this.#state.users.length > 0) this.#state.defaultRoom = this.#state.users[0].login;
+  }
   async init() {
     await this.#authService.loggedUserByLS();
     const users = await this.fetchUsers<User>();
 
     this.#state.users = users.filter((user: User) => user.login !== this.#state.user?.login);
+
+    if (users.length > 0) {
+      this.activateRoom();
+    }
   }
   getUsers(): User[] {
     return this.#state.users;
@@ -115,6 +131,9 @@ export default class UserService {
 
   getUser(): User | null {
     return this.#state.user;
+  }
+  getActiveRoom(): UserState["defaultRoom"] {
+    return this.#state.defaultRoom;
   }
 
   async fetchUsers<T>(): Promise<T[]> {
