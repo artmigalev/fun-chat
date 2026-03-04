@@ -14,8 +14,10 @@ import { v4 as uuidv4 } from "uuid";
 import { NotificationService } from "./notyfication.service";
 import { UserType } from "@/app/enum/user.enum";
 import { GeneralResponse } from "@/types/interfaces/api.interfaces";
+import { AuthenticationService } from "./auth.service";
 
 export type UserState = {
+  roomByUser: User['login'] | null;
   user: User | null;
   users: User[];
 };
@@ -23,10 +25,10 @@ type UserSubscriberCallback = (state: UserState) => void;
 
 export default class UserService {
   static #instance: UserService;
-  #user: User | null = null;
+  #authService: AuthenticationService = AuthenticationService.getInstance();
   #socket: WS;
   #notify: NotificationService;
-  #users: User[] = [];
+  #state: UserState = { roomByUser: null, user: null, users: [] };
 
   #subscribers: UserSubscriberCallback[] = [];
 
@@ -88,31 +90,33 @@ export default class UserService {
   };
   private notifySubscribers = () => {
     const state: UserState = {
-      user: this.#user,
-      users: this.#users,
+      user: this.#state.user,
+      users: this.#state.users,
+      roomByUser: this.#state.user?.login || null,
     };
     for (const subscriber of this.#subscribers) {
       subscriber(state);
     }
   };
   private updateUsers = (user: User) => {
-    this.#users = [...this.#users, user];
+    this.#state.users = [...this.#state.users, user];
   };
   private destroyUserByUsers(login: User["login"]) {
-    this.#users = this.#users.filter((user) => user.login !== login);
+    this.#state.users = this.#state.users.filter((user) => user.login !== login);
   }
   async init() {
+    await this.#authService.loggedUserByLS();
     const users = await this.fetchUsers<User>();
 
-    this.#users = users.filter((user: User) => user.login !== this.#user?.login);
+    this.#state.users = users.filter((user: User) => user.login !== this.#state.user?.login);
   }
   getUsers(): User[] {
 
-    return this.#users;
+    return this.#state.users;
   }
 
   getUser(): User | null {
-    return this.#user;
+    return this.#state.user;
   }
 
   async fetchUsers<T>(): Promise<T[]> {
@@ -145,15 +149,15 @@ export default class UserService {
   }
 
   userDestroy() {
-    this.#user = null;
+    this.#state.user = null;
   }
   userSetCredentials(userData: User) {
 
-    this.#user = {...this.#user, ...userData };
+    this.#state.user = {...this.#state.user, ...userData };
   }
   toggleStatus(status: boolean) {
-    if (this.#user) {
-      this.#user = { ...this.#user, isLogined: status };
+    if (this.#state.user) {
+      this.#state.user = { ...this.#state.user, isLogined: status };
     }
   }
 }

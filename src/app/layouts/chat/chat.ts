@@ -22,18 +22,7 @@ export class ChatComponent extends Component {
 
     this.appendChildren([this.#viewMessages, this.#controlPanel]);
 
-    // this.#notify.subscribe(this.handleNotify);
   }
 
-  // private handleNotify = (event: MessageEvent['type'], data: MessageEvent['data']) => {
-
-  //   switch (event) {
-  //     case MsgType.MSG_SEND: {
-  //       break;
-  //     }
-  //     case "user": {
-
-  //     }
-  //   }
-  // }
+  
 }

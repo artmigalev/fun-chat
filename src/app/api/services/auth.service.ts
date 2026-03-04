@@ -28,6 +28,13 @@ export class AuthenticationService {
     return AuthenticationService.#instance;
   }
 
+  loggedUserByLS = async () => {
+    const user = localStorage.getItem(UserType.LOGGED_USER);
+    if (user) {
+      await this.addUser<User>(JSON.parse(user));
+    }
+  };
+
   async addUser<T>(data: User): Promise<T> {
     let response;
     if (AuthenticationService.#socket.readyState === AuthenticationService.#socket.OPEN) {

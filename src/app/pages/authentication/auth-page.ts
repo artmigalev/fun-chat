@@ -101,6 +101,9 @@ export class AuthenticationPage extends Component {
       const response = await this.#authService.addUser<UserAuthResponse | UserAuthResponseErrors>(
         userCredential,
       );
+      if(response.type === UserType.USER_LOGIN) {
+        localStorage.setItem(UserType.LOGGED_USER, JSON.stringify(userCredential));
+      }
 
       if (response.type === UserType.ERROR) {
         this.showError(true, response.payload.error);
