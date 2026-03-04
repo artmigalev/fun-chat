@@ -3,20 +3,17 @@ import Message from "@components/message/message";
 import { Message as IMassage } from "@/types/interfaces/message.interface";
 
 export class ViewMessages extends Component {
-  #item: Component;
+
   constructor(messages: [] | IMassage[]) {
     super({
       tag: "md-list",
       className: "list-msg",
     });
-    this.#item = new Component({
-      tag: "md-list-item",
-      className: "list-msg-item",
-    });
+
 
     if (messages.length > 0) {
-      const items = this.renderItemsWithMsgs(messages, this.#item);
-      this.appendChildren(items);
+     this.renderHistory(messages);
+
     } else {
       const span = new Component({
         tag: "span",
@@ -27,21 +24,21 @@ export class ViewMessages extends Component {
     }
   }
 
-  renderItemsWithMsgs(msgs: IMassage[], item: Component): Component[] {
-    if (msgs.length === 0) console.log("messages empty");
-    return msgs.map((message) => {
+  renderHistory(history: IMassage[]) {
+
+    this.removeChildren()
+    const items =  history.map((message) => {
+      const item = new Component({
+        tag: "md-list-item",
+        className: "list-msg-item",
+      });
+
       item.getNode().innerHTML = "";
       item.append(new Message(message));
       return item;
     });
+    this.appendChildren(items);
   }
 
-  renderHistory(history: IMassage[]) {
-    if (history.length > 0) {
-      this.removeChildren();
-      const items = this.renderItemsWithMsgs(history, this.#item);
-      this.appendChildren(items);
-    }
-    return;
-  }
+
 }

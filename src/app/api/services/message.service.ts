@@ -13,7 +13,6 @@ import UserService from "./user.service";
 import { NotificationService } from "./notyfication.service";
 
 export type MessageState = {
-  // message: Message | null;
   history: Message[];
 };
 
@@ -37,13 +36,15 @@ export class MessageService {
     this.#socket = WS.getInstance();
     this.#notify = NotificationService.getInstance();
     this.#notify.subscribe(this.handleNotify);
-    this.init();
   }
 
-  private init() {
+    async init() {
     const room = this.#userService.getActiveRoom();
 
-    if (room) this.getHistoryByUser();
+    if (room) {
+        await this.getHistoryByUser();
+
+    }
   }
 
   static getInstance() {
@@ -88,9 +89,12 @@ export class MessageService {
         if ('messages' in payload) {
 
           const { messages } = payload as MessageHistoryFromUserResponse["payload"];
+          console.log(messages);
+
           this.updateHistory(messages);
+
         }
-       
+
 
 
         break;
@@ -110,6 +114,10 @@ export class MessageService {
   }
 
   updateHistory(history: Message[]) {
+
+
+
+
     this.#state.history = history;
   }
 
@@ -117,7 +125,9 @@ export class MessageService {
     return this.#state.history;
   }
   private async getHistoryByUser() {
+
     const room = this.#userService.getActiveRoom();
+    console.log(room);
     if (room) {
       const request = {
         id: uuidv4(),

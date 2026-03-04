@@ -2,6 +2,7 @@ import UserService from "./api/services/user.service";
 import { Component } from "./components/component";
 import Router from "./router/router";
 import { Routes } from "./enum/routes.enums";
+import { MessageService } from "./api/services/message.service";
 
 export class App extends Component {
   #router: Router;
@@ -14,13 +15,15 @@ export class App extends Component {
 
   async init() {
     await this.#userService.init();
+    await MessageService.getInstance().init();
+    
     this.loadPage();
   }
 
   loadPage() {
 
     const user = this.#userService.getUser()
-    
+
     if (user?.isLogined) {
       this.#router.navigate(Routes.HOME);
     } else {
