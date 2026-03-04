@@ -1,9 +1,7 @@
 import UserService, { UserState } from "@/app/api/services/user.service";
 import { Component } from "../component";
 import { UserList } from "../users-list/users-list";
-import {
-  User,
-} from "@/types/interfaces/user.interface";
+import { User } from "@/types/interfaces/user.interface";
 
 export default class SideBar extends Component {
   #userList: UserList;
@@ -18,10 +16,9 @@ export default class SideBar extends Component {
     this.append(this.#userList);
   }
   private handleNotify = (state: UserState) => {
-    const clientsChat = state.users.filter((chatUser)=> chatUser.login !== state.user?.login )
+    const clientsChat = state.users.filter((chatUser) => chatUser.login !== state.user?.login);
 
     this.render(clientsChat);
-
   };
   render(users: User[]) {
     this.removeChildren();

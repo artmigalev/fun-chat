@@ -1,28 +1,30 @@
-import { MessageService } from "@/app/api/services/message.service";
-import { NotificationService } from "@/app/api/services/notyfication.service";
-import UserService from "@/app/api/services/user.service";
+import { MessageService, MessageState } from "@/app/api/services/message.service";
 import { Component } from "@/app/components/component";
 import { ControlPanel } from "@/app/components/panel/control-panel";
 import { ViewMessages } from "@/app/components/view/list-message";
+import { Message } from "@/types/interfaces/message.interface";
 
 export class ChatComponent extends Component {
-  #notify: NotificationService = NotificationService.getInstance();
-  #userService: UserService = UserService.getInstance();
   #messageService: MessageService = MessageService.getInstance();
 
-  #historyMessages: [] = [];
+  #historyMessages: Message[] = [];
   #controlPanel: ControlPanel;
   #viewMessages: ViewMessages;
 
   constructor() {
     super({ className: "chat" });
     this.#historyMessages = this.#messageService.getHistory();
-    this.#viewMessages = new ViewMessages([]);
+    this.#messageService.subscribe(this.messageHandleUpdate);
+
+    this.#viewMessages = new ViewMessages(this.#historyMessages);
     this.#controlPanel = new ControlPanel();
 
     this.appendChildren([this.#viewMessages, this.#controlPanel]);
-
   }
 
-  
+  private messageHandleUpdate = (state: MessageState) => {
+    this.#historyMessages = state.history;
+    console.log(this.#historyMessages);
+    this.#viewMessages.renderHistory(this.#historyMessages);
+  };
 }

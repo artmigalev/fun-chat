@@ -33,7 +33,6 @@ export default class UserService {
   #subscribers: UserSubscriberCallback[] = [];
 
   private constructor() {
-
     this.#socket = WS.getInstance();
     this.#notify = NotificationService.getInstance();
     this.#notify.subscribe(this.handleNotify);
@@ -111,7 +110,6 @@ export default class UserService {
     this.#state.users = users.filter((user: User) => user.login !== this.#state.user?.login);
   }
   getUsers(): User[] {
-
     return this.#state.users;
   }
 
@@ -137,7 +135,6 @@ export default class UserService {
   }
 
   async getActiveUsers<T>(): Promise<T | []> {
-
     const response = await this.#socket.sendRequest<GeneralUsersStatusResponse>({
       id: uuidv4(),
       payload: null,
@@ -152,8 +149,7 @@ export default class UserService {
     this.#state.user = null;
   }
   userSetCredentials(userData: User) {
-
-    this.#state.user = {...this.#state.user, ...userData };
+    this.#state.user = { ...this.#state.user, ...userData };
   }
   toggleStatus(status: boolean) {
     if (this.#state.user) {
