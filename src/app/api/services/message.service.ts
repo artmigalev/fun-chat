@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import WS from "./ws";
 import { GeneralRequest, GeneralResponse } from "@/types/interfaces/api.interfaces";
 import UserService from "./user.service";
-import { NotificationService } from "./notyfication.service";
+import { NotificationService } from "./notification.service";
 
 export type MessageState = {
   history: Message[];
@@ -25,7 +25,6 @@ export class MessageService {
   #notify: NotificationService;
 
   #state: MessageState = {
-
     history: [],
   };
 
@@ -38,12 +37,11 @@ export class MessageService {
     this.#notify.subscribe(this.handleNotify);
   }
 
-    async init() {
+  async init() {
     const room = this.#userService.getActiveRoom();
 
     if (room) {
-        await this.getHistoryByUser();
-
+      await this.getHistoryByUser();
     }
   }
 
@@ -54,8 +52,6 @@ export class MessageService {
     return MessageService.#instance;
   }
   subscribe(callback: MessageClbk) {
-
-
     this.#subscribers.push(callback);
   }
   unsubscribe(callback: MessageClbk) {
@@ -71,12 +67,12 @@ export class MessageService {
     }
   }
 
-  private handleNotify = (type: GeneralResponse["type"], payload: GeneralResponse['payload']) => {
+  private handleNotify = (type: GeneralResponse["type"], payload: GeneralResponse["payload"]) => {
     switch (type) {
       case MsgType.MSG_SEND: {
         console.log(payload);
 
-        const { message } = payload as MessageSendUserResponse['payload'];
+        const { message } = payload as MessageSendUserResponse["payload"];
         this.addToHistory(message);
 
         break;
@@ -86,16 +82,12 @@ export class MessageService {
       // case "MSG_DELETE":
       // case "MSG_COUNT_NOT_READED_FROM_USER":
       case MsgType.MSG_FROM_USER: {
-        if ('messages' in payload) {
-
+        if ("messages" in payload) {
           const { messages } = payload as MessageHistoryFromUserResponse["payload"];
           console.log(messages);
 
           this.updateHistory(messages);
-
         }
-
-
 
         break;
       }
@@ -114,10 +106,6 @@ export class MessageService {
   }
 
   updateHistory(history: Message[]) {
-
-
-
-
     this.#state.history = history;
   }
 
@@ -125,7 +113,6 @@ export class MessageService {
     return this.#state.history;
   }
   private async getHistoryByUser() {
-
     const room = this.#userService.getActiveRoom();
     console.log(room);
     if (room) {

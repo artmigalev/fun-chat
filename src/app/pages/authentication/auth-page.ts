@@ -1,6 +1,7 @@
 import { AuthenticationService } from "@/app/api/services/auth.service";
 import UserService, { UserState } from "@/app/api/services/user.service";
 import { Component } from "@/app/components/component";
+import { Routes } from "@/app/enum/routes.enums";
 import { UserType } from "@/app/enum/user.enum";
 import Router from "@/app/router/router";
 import { loginValidator } from "@/app/utils/validator";
@@ -68,11 +69,14 @@ export class AuthenticationPage extends Component {
   }
   handleUserLogin = (state: UserState) => {
     const { user } = state;
+    console.log(user);
 
     if (user && user.isLogined) {
       const user = this.getUserCredential();
       this.#userService.userSetCredentials(user);
-      this.#router.navigate("home");
+      localStorage.setItem(UserType.LOGGED_USER, JSON.stringify(user));
+      this.#router.navigate(Routes.HOME);
+      this.#userService.unSubscribe(this.handleUserLogin);
     }
   };
 
@@ -98,20 +102,9 @@ export class AuthenticationPage extends Component {
 
     const valid = loginValidator(userCredential);
     if (valid) {
-      const response = await this.#authService.addUser<UserAuthResponse | UserAuthResponseErrors>(
-        userCredential,
-      );
-      if(response.type === UserType.USER_LOGIN) {
-        localStorage.setItem(UserType.LOGGED_USER, JSON.stringify(userCredential));
-      }
-
-      if (response.type === UserType.ERROR) {
-        this.showError(true, response.payload.error);
-        return;
-      }
+      await this.#authService.addUser<UserAuthResponse | UserAuthResponseErrors>(userCredential);
 
       this.#form.removeListener("submit", this.login);
-      // console.log(response);
     }
   };
 }

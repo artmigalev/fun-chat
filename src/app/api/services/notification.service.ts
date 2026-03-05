@@ -1,7 +1,10 @@
 import { GeneralResponse } from "@/types/interfaces/api.interfaces";
 import WS from "./ws";
 
-export type NotifyCallback = (type: GeneralResponse["type"], payload: GeneralResponse["payload"]) => void;
+export type NotifyCallback = (
+  type: GeneralResponse["type"],
+  payload: GeneralResponse["payload"],
+) => void;
 
 export class NotificationService {
   #listeners: NotifyCallback[] = [];
@@ -31,7 +34,6 @@ export class NotificationService {
     this.#listeners = this.#listeners.filter((listenerCallback) => listenerCallback !== callback);
   }
   notifyListener(type: GeneralResponse["type"], payload: GeneralResponse["payload"]) {
-
     for (const callback of this.#listeners) {
       callback(type, payload);
     }

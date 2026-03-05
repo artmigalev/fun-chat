@@ -23,9 +23,7 @@ export class ChatComponent extends Component {
   }
 
   private messageHandleUpdate = (state: MessageState) => {
-
     this.#historyMessages = state.history;
-    
 
     this.#viewMessages.renderHistory(this.#historyMessages);
   };

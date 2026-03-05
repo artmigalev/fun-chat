@@ -9,16 +9,14 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 export class AuthenticationService {
-  static #socket: WS;
   static #instance: AuthenticationService;
-
+  static #socket: WS;
   private constructor() {
     if (AuthenticationService.#instance) {
       return AuthenticationService.#instance;
     }
 
     AuthenticationService.#socket = WS.getInstance();
-    AuthenticationService.#instance = this;
   }
 
   static getInstance() {
@@ -31,39 +29,35 @@ export class AuthenticationService {
   loggedUserByLS = async () => {
     const user = localStorage.getItem(UserType.LOGGED_USER);
     if (user) {
-      await this.addUser<User>(JSON.parse(user));
+      await this.addUser(JSON.parse(user));
     }
   };
 
-  async addUser<T>(data: User): Promise<T> {
-    let response;
-    if (AuthenticationService.#socket.readyState === AuthenticationService.#socket.OPEN) {
-      response = await AuthenticationService.#socket.sendRequest<T>({
-        id: uuidv4(),
-        type: UserType.USER_LOGIN,
-        payload: {
-          user: data,
-        },
-      });
-
-      return response;
+  async addUser<T>(data: User) {
+    if (AuthenticationService.#socket.readyState !== AuthenticationService.#socket.OPEN) {
+      throw new Error("socked not  connection");
     }
-    throw new Error("socked not  connection");
+    await AuthenticationService.#socket.sendRequest<T>({
+      id: uuidv4(),
+      type: UserType.USER_LOGIN,
+      payload: {
+        user: data,
+      },
+    });
   }
-  async logout(data: User): Promise<UserLogoutResponse | UserLogoutResponseError> {
-    let response;
-    if (AuthenticationService.#socket.readyState === AuthenticationService.#socket.OPEN) {
-      response = await AuthenticationService.#socket.sendRequest<
-        UserLogoutResponse | UserLogoutResponseError
-      >({
-        id: uuidv4(),
-        type: UserType.USER_LOGOUT,
-        payload: {
-          user: data,
-        },
-      });
-      return response;
+  async logout(user: User) {
+    if (AuthenticationService.#socket.readyState !== AuthenticationService.#socket.OPEN) {
+      throw new Error("socket not connection");
     }
-    throw new Error("socket not connection");
+
+    if (!user) throw new Error("User is  undefined");
+
+    await AuthenticationService.#socket.sendRequest<UserLogoutResponse | UserLogoutResponseError>({
+      id: uuidv4(),
+      type: UserType.USER_LOGOUT,
+      payload: {
+        user: user,
+      },
+    });
   }
 }

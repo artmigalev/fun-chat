@@ -1,32 +1,34 @@
 import { UserAuth } from "@/app/enum/user-auth.enum";
 import WS from "@/app/api/services/ws";
-import {
-  AllActiveUsersResponse,
-  AllInactiveUsersResponse,
-  GeneralUsersStatusResponse,
-} from "@/types/interfaces/auth.unterfaces";
-import {
-  User,
-} from "@/types/interfaces/user.interface";
+import { GeneralUsersStatusResponse } from "@/types/interfaces/auth.interface";
+import { User } from "@/types/interfaces/user.interface";
 import { v4 as uuidv4 } from "uuid";
-import { NotificationService } from "./notyfication.service";
+import { NotificationService } from "./notification.service";
 import { UserType } from "@/app/enum/user.enum";
 import { GeneralResponse } from "@/types/interfaces/api.interfaces";
-import { AuthenticationService } from "./auth.service";
 
 export type UserState = {
-  defaultRoom: User["login"] | null;
+  room: User["login"] | null;
   user: User | null;
-  users: User[];
+  users: {
+    unauthorized: User[];
+    authenticated: User[];
+  };
 };
 type UserSubscriberCallback = (state: UserState) => void;
 
 export default class UserService {
   static #instance: UserService;
-  #authService: AuthenticationService = AuthenticationService.getInstance();
   #socket: WS;
   #notify: NotificationService;
-  #state: UserState = { defaultRoom: null, user: null, users: [] };
+  #state: UserState = {
+    room: null,
+    user: null,
+    users: {
+      unauthorized: [],
+      authenticated: [],
+    },
+  };
 
   #subscribers: UserSubscriberCallback[] = [];
 
@@ -53,35 +55,47 @@ export default class UserService {
     );
   }
 
-  private handleNotify = (type: GeneralResponse["type"], payload: GeneralResponse["payload"]) => {
-    if ("user" in payload) {}
-
+  private handleNotify = async (
+    type: GeneralResponse["type"],
+    payload: GeneralResponse["payload"],
+  ) => {
     switch (type) {
       case UserType.USER_LOGIN: {
         if ("user" in payload) {
           const { user } = payload;
           this.userSetCredentials(user);
           this.toggleStatus(user.isLogined);
-          this.updateUsers(user);
+          await this.fetchUsers();
         }
         break;
       }
       case UserType.USER_LOGOUT: {
         this.userDestroy();
+
         break;
       }
 
       case UserType.USER_EXTERNAL_LOGIN: {
-        if ("user" in payload) {
-          const { user } = payload;
-          this.updateUsers(user);
-        }
+        await this.fetchUsers();
         break;
       }
       case UserType.USER_EXTERNAL_LOGOUT: {
-        if ("user" in payload) {
-          const { user } = payload;
-          this.destroyUserByUsers(user.login);
+        await this.fetchUsers();
+
+        break;
+      }
+      case UserAuth.USER_ACTIVE: {
+        if ("users" in payload) {
+          const { users } = payload;
+          this.#state.users.authenticated = users;
+        }
+        break;
+      }
+
+      case UserAuth.USER_INACTIVE: {
+        if ("users" in payload) {
+          const { users } = payload;
+          this.#state.users.unauthorized = users;
         }
         break;
       }
@@ -96,79 +110,69 @@ export default class UserService {
     const state: UserState = {
       user: this.#state.user,
       users: this.#state.users,
-      defaultRoom: this.#state.user?.login || null,
+      room: this.#state.user?.login || null,
     };
     for (const subscriber of this.#subscribers) {
       subscriber(state);
     }
   };
-  private updateUsers = (user: User) => {
-    this.#state.users = [...this.#state.users, user];
-  };
-  private destroyUserByUsers(login: User["login"]) {
-    this.#state.users = this.#state.users.filter((user) => user.login !== login);
-  }
+
   activateRoom(login?: string) {
-    // const {users, defaultRoom} = this.#state
+    const { unauthorized } = this.#state.users;
     if (login) {
-      this.#state.defaultRoom = login;
+      this.#state.room = login;
     }
-    if (this.#state.users.length > 0) this.#state.defaultRoom = this.#state.users[0].login;
+    if (unauthorized.length > 0) this.#state.room = unauthorized[0].login;
   }
   async init() {
-    await this.#authService.loggedUserByLS();
-    const users = await this.fetchUsers<User>();
-
-    this.#state.users = users.filter((user: User) => user.login !== this.#state.user?.login);
-
-    if (users.length > 0) {
-      this.activateRoom();
+    await this.fetchUsers();
+  }
+  getUsersType(type: "USER_ACTIVE" | "USER_INACTIVE"): User[] {
+    switch (type) {
+      case "USER_ACTIVE": {
+        return this.#state.users.authenticated;
+      }
+      case "USER_INACTIVE": {
+        return this.#state.users.unauthorized;
+      }
     }
   }
-  getUsers(): User[] {
-    return this.#state.users;
+  getAllUsers() {
+    return [...this.#state.users.authenticated, ...this.#state.users.unauthorized];
   }
 
   getUser(): User | null {
     return this.#state.user;
   }
-  getActiveRoom(): UserState["defaultRoom"] {
-    return this.#state.defaultRoom;
+  getActiveRoom(): UserState["room"] {
+    return this.#state.room;
   }
 
-  async fetchUsers<T>(): Promise<T[]> {
-    const allUsers = await Promise.all([
-      ...(await this.getAllInactiveUsers<AllInactiveUsersResponse["payload"]["users"]>()),
-      ...(await this.getActiveUsers<AllActiveUsersResponse["payload"]["users"]>()),
-    ]);
-    return allUsers.flat();
+  async fetchUsers() {
+    await this.getAllInactiveUsers();
+    await this.getActiveUsers();
   }
-  async getAllInactiveUsers<T>(): Promise<T | []> {
-    const response = await this.#socket.sendRequest<GeneralUsersStatusResponse>({
+  async getAllInactiveUsers() {
+    await this.#socket.sendRequest<GeneralUsersStatusResponse>({
       id: uuidv4(),
       type: UserAuth.USER_INACTIVE,
       payload: null,
     });
-    const { users } = response.payload;
-    return users;
   }
 
-  async getActiveUsers<T>(): Promise<T | []> {
-    const response = await this.#socket.sendRequest<GeneralUsersStatusResponse>({
+  async getActiveUsers() {
+    await this.#socket.sendRequest<GeneralUsersStatusResponse>({
       id: uuidv4(),
       payload: null,
       type: UserAuth.USER_ACTIVE,
     });
-
-    const { users } = response.payload;
-    return users;
   }
 
   userDestroy() {
     this.#state.user = null;
   }
   userSetCredentials(userData: User) {
-    this.#state.user = { ...this.#state.user, ...userData };
+    this.#state.user = { ...userData };
   }
   toggleStatus(status: boolean) {
     if (this.#state.user) {

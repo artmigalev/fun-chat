@@ -1,4 +1,4 @@
-import { GeneralUsersStatusRequest, GeneralUsersStatusResponse } from "./auth.unterfaces";
+import { GeneralUsersStatusRequest, GeneralUsersStatusResponse } from "./auth.interface";
 import { GeneralMessageRequest, GeneralMessageResponse } from "./message.interface";
 import { GeneralNotificationRequest, GeneralNotificationResponse } from "./notification.interface";
 import { GeneralUserRequest, GeneralUserResponse } from "./user.interface";

@@ -9,8 +9,6 @@ export default class Message extends Component {
   // #status: Component;
 
   constructor(data: IMassage) {
-   
-
     const title = new Component({
       tag: "h5",
       className: "title-from",

@@ -3,17 +3,14 @@ import Message from "@components/message/message";
 import { Message as IMassage } from "@/types/interfaces/message.interface";
 
 export class ViewMessages extends Component {
-
   constructor(messages: [] | IMassage[]) {
     super({
       tag: "md-list",
       className: "list-msg",
     });
 
-
     if (messages.length > 0) {
-     this.renderHistory(messages);
-
+      this.renderHistory(messages);
     } else {
       const span = new Component({
         tag: "span",
@@ -25,9 +22,8 @@ export class ViewMessages extends Component {
   }
 
   renderHistory(history: IMassage[]) {
-
-    this.removeChildren()
-    const items =  history.map((message) => {
+    this.removeChildren();
+    const items = history.map((message) => {
       const item = new Component({
         tag: "md-list-item",
         className: "list-msg-item",
@@ -39,6 +35,4 @@ export class ViewMessages extends Component {
     });
     this.appendChildren(items);
   }
-
-
 }

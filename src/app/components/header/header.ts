@@ -28,6 +28,7 @@ export class Header extends Component {
     super({ tag: "header", className: "header" }, title, container);
 
     this.#userService = UserService.getInstance();
+
     this.#authService = AuthenticationService.getInstance();
     this.#userService.subscribe(this.handleUserUpdate);
     this.#router = Router.getInstance();
@@ -42,16 +43,17 @@ export class Header extends Component {
   }
 
   private handleUserUpdate = (state: UserState) => {
+    if (state.user === null) {
+      this.#router.navigate(Routes.LOGIN);
+      this.#userService.unSubscribe(this.handleUserUpdate);
+    }
     this.#profile.render(state.user);
   };
 
   logout = async () => {
     const user = this.#userService.getUser();
     if (user) {
-      console.log(user);
-
       await this.#authService.logout(user);
-      this.#router.navigate(Routes.LOGIN);
     }
   };
 }

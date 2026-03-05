@@ -46,7 +46,7 @@ export class ControlPanel extends Component {
     if (activeRoom) {
       const textAria = this.#textInput.getNode() as TextField;
 
-      this.#messageService.sendingMessageByUser(textAria.value,activeRoom);
+      this.#messageService.sendingMessageByUser(textAria.value, activeRoom);
     }
 
     this.removeListener("click", this.handleSubmit);
