@@ -54,6 +54,10 @@ export default class UserService {
       (listenerCallback) => listenerCallback !== callback,
     );
   }
+  async init() {
+    await this.fetchUsers();
+    
+  }
 
   private handleNotify = async (
     type: GeneralResponse["type"],
@@ -61,7 +65,11 @@ export default class UserService {
   ) => {
     switch (type) {
       case UserType.USER_LOGIN: {
+          console.log(this.#state);
+
+
         if ("user" in payload) {
+
           const { user } = payload;
           this.userSetCredentials(user);
           this.toggleStatus(user.isLogined);
@@ -123,9 +131,6 @@ export default class UserService {
       this.#state.room = login;
     }
     if (unauthorized.length > 0) this.#state.room = unauthorized[0].login;
-  }
-  async init() {
-    await this.fetchUsers();
   }
   getUsersType(type: "USER_ACTIVE" | "USER_INACTIVE"): User[] {
     switch (type) {

@@ -44,6 +44,7 @@ export class ControlPanel extends Component {
     event.preventDefault();
     const activeRoom = this.#userService.getActiveRoom();
     if (activeRoom) {
+      
       const textAria = this.#textInput.getNode() as TextField;
 
       this.#messageService.sendingMessageByUser(textAria.value, activeRoom);
