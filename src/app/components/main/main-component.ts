@@ -7,7 +7,7 @@ export class MainComponent extends Component {
   #users: SideBar;
 
   constructor() {
-    super({ className: "main", styles: { display: "flex" } });
+    super({ className: "main",  });
 
     this.#chat = new ChatComponent();
     this.#users = new SideBar();

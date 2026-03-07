@@ -3,10 +3,9 @@
   border-radius: var(--md-sys-shape-corner-small);
 
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 70px;
-  grid-column-gap: 1px;
-  grid-row-gap: 1px;
-  height: 100%;
+   grid-template-columns: minmax(auto ,150px)  1fr;
+   column-gap: 4px;
   overflow: hidden;
+  height: 100%;
+
 }

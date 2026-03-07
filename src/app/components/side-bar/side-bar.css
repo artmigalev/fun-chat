@@ -1,5 +1,16 @@
 .side-bar {
   padding: 0 4px 0 4px;
-  width: 30%;
-  max-width: 150px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-medium);
+
+}
+.plug{
+  text-align: center;
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-style: var(--md-sys-typescale-body-medium-line-height);
+  font-weight: bold;
+  color: var(--md-sys-color-surface-variant);
 }
